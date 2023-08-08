@@ -1,0 +1,82 @@
+﻿<div class="modal fade" id="registerModal" tabindex="-1" aria-labelledby="registerModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="registerModalLabel">Register User</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form id="registerForm">
+                    <div class="mb-3">
+                        <label for="emailInput" class="form-label">Email</label>
+                        <input type="email" class="form-control" id="emailInput" name="Email" required>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="passwordInput" class="form-label">Password</label>
+                        <input type="password" class="form-control" id="passwordInput" name="Password" required>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="confirmPasswordInput" class="form-label">Confirm Password</label>
+                        <input type="password" class="form-control" id="confirmPasswordInput" name="ConfirmPassword" required>
+                    </div>
+
+                    <div class="mb-3">
+                        <div id="registerMessage" class="text-danger"></div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="firstNameInput" class="form-label">FirstName</label>
+                        <input type="text" class="form-control" id="firstNameInput" name="FirstName" required>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="lastNameInput" class="form-label">LastName</label>
+                        <input type="text" class="form-control" id="lastNameInput" name="LastName" required>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="taxNumberInput" class="form-label">TaxNumber</label>
+                        <input type="text" class="form-control" id="taxNumberInput" name="TaxNumber" required>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label" for="postalCodeId">CEP</label>
+                        <input type="text" class="form-control" id="postalCodeId" name="PostalCode" required>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label" for="form6Example4">Cidade</label>
+                        <input type="text" class="form-control" id="cityInput" name="City" readonly>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label" for="form6Example4">Estado</label>
+                        <input type="text" class="form-control" id="stateInput" name="State" readonly>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label" for="form6Example4">Bairro</label>
+                        <input type="text" class="form-control" id="neighborhoodInput" name="Neighborhood" readonly>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label" for="form6Example4">Logradouro</label>
+                        <input type="text" class="form-control" id="publicPlaceInput" name="PublicPlace" readonly>
+                    </div>
+
+                    <div class="mb-3">
+                        <div id="loginMessage" class="text-danger"></div>
+                    </div>
+
+                    <div class="d-grid">
+                        <button type="button" id="submitRegister" class="btn btn-primary">Register</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="~/js/Register.js"></script>

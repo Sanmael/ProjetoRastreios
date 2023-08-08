@@ -1,0 +1,43 @@
+﻿<div class="modal fade" id="PersonCreateModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Cadastro de nova Pessoa</h5>
+            </div>
+            <div class="modal-body">
+                <form id="registerPersonForm">
+                    <div class="form-outline mb-4">
+                        <label class="form-label" for="form6Example4">Nome</label>
+                        <input type="text" class="form-control" id="nameInputRegister" name="FirstName" required>
+                    </div>
+
+                    <div class="form-outline mb-4">
+                        <label class="form-label" for="form6Example4">Primeiro Nome</label>
+                        <input type="text" class="form-control" id="lastNameInputRegister" name="LastName" required>
+                    </div>
+
+                    <div class="form-outline mb-4">
+                        <label class="form-label" for="form6Example4">Email</label>
+                        <input type="text" class="form-control" id="emailInputRegister" name="Email" required>
+                    </div>
+                  
+                </form>
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" id="submitCreateSubPerson" class="btn btn-success">Salvar</button>
+                <button type="button" id="closeModalCreate" class="btn btn-secondary" data-dismiss="modal">Fechar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="~/js/jquery.js"></script>
+<script src="~/js/SubPerson.js"></script>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}
+

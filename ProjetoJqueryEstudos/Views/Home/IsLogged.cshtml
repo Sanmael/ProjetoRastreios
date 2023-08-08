@@ -1,0 +1,97 @@
+﻿<style>
+    @@media (max-width: 768px) {
+        .card {
+            margin-bottom: 10px;
+        }
+    }
+
+    .button-group {
+        display: inline-block;
+        margin-right: 10px;
+        vertical-align: top;
+        width: calc(33.33% - 10px);
+    }
+
+    .bg-image {
+        background-image: url("");
+        background-size: cover;
+        background-position: top;
+        min-height: 100vh;
+        justify-content: center;
+        align-items: center;
+    }
+</style>
+<body class="bg-image">
+    <br />
+
+    <div class="col-12">
+        <h3 class="text-center">Olá @User.Identity.Name você está na tela de Opções</h3>
+    </div>
+    <br />
+
+    <div style="display: flex; justify-content: center; align-items: end;">
+        <div class="row">            
+            <div class="col-md-3">
+                <div class="card">
+                    <div class="card-body">
+                        <label>Aqui é possivel Cadastrar um novo "Usuario"</label>
+                        <button type="button" id="PersonCreateModalButton" class="btn btn-success">Criar Pessoa</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-3">
+                <div class="card">
+                    <div class="card-body">
+                        <label>Aqui é possivel pagar contas no Cartão/Dinheiro</label>
+                        <a href="@Url.Action("PaymentDetails", "Payment")" class="btn btn-primary">Realizar Pagamento</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-3">
+                <div class="card">
+                    <div class="card-body">
+                        <label>Use para adicionar saldo a sua person através do CPF</label>
+                        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#addMoneyModal">Adicionar Dinheiro</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-3">
+                <div class="card">
+                    <div class="card-body">
+                        <label>Busca todos os Pagamentos ativos (DINHEIRO/CARTÃO)</label>
+                        <a href="@Url.Action("ReturnPayments", "Payment")" class="btn btn-primary">Buscar todos Pagamentos</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-3 pt-3">
+                <div class="card">
+                    <div class="card-body">
+                        <label>Busca todos os Pagamentos Pagos por Data</label>
+                        <a href="@Url.Action("PaymentsPaid", "Payment")" class="btn btn-primary">Buscar</a>
+                    </div>
+                </div>
+            </div>
+
+
+        </div>
+    </div>
+</body>
+<partial name="_PersonCreate" />
+
+<script src="~/js/jquery.js"></script>
+<script src="~/js/PersonCreate.js"></script>
+
+<script>
+    let buttonModal = $('#PersonCreateModalButton');
+
+    buttonModal.on("click", function () {
+        $("#PersonCreateModal").modal("show");
+    })
+</script>
+
+
+

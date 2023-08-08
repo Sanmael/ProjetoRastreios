@@ -1,0 +1,44 @@
+﻿@model ProjetoJqueryEstudos.Entities.Person
+@{
+    ViewData["Title"] = "PersonEdit";
+}
+<style>
+    .address input {
+        display: block;
+        margin-bottom: 10px;
+    }
+</style>
+<h1>Edição de Pessoa</h1>
+
+<h4>@Model.FirstName, @Model.Email</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form>
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+            <div id="addressForm">
+                <input type="hidden" id="PersonId" value="@Model.PersonId" asp-for="PersonId" />
+
+
+            </div>
+            <button type="button" id="addAddressBtn">Adicionar Endereço</button>
+            <button type="button" id="saveBtn">Salvar</button>
+
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+<script src="~/js/jquery.js"></script>
+
+<script src="~/js/ScriptAddress.js"></script>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

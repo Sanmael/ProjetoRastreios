@@ -1,0 +1,46 @@
+﻿<style>
+    #addressDetailModal input.form-control {
+        font-size: 14px; 
+        height: 28px; 
+        padding: 5px 10px; 
+    }
+</style>
+
+<div class="modal fade bd-example-modal-sm" id="addressDetailModal" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-sm">
+        <div class="modal-content">
+            <div class="modal-body">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Endereço Principal</h5>
+                </div>
+                <form>
+                    <div class="form-outline mb-4">
+                        <label class="form-label" for="form6Example4">CEP</label>
+                        <input id="postalCodeDetail" class="form-control form-control-sm" readonly />
+                    </div>
+
+                    <div class="form-outline mb-4">
+                        <label class="form-label" for="form6Example4">Cidade</label>
+                        <input id="cityInputDetail" class="form-control form-control-sm" readonly />
+                    </div>
+
+                    <div class="form-outline mb-4">
+                        <label class="form-label" for="form6Example4">Estado</label>
+                        <input id="stateInputDetail" class="form-control form-control-sm" readonly />
+                    </div>
+
+                    <div class="form-outline mb-4">
+                        <label class="form-label" for="form6Example4">Bairro</label>
+                        <input id="neighborhoodInputDetail" class="form-control form-control-sm" readonly />
+                    </div>
+
+                    <div class="form-outline mb-4">
+                        <label class="form-label" for="form6Example4">Logradouro</label>
+                        <input id="publicPlaceInputDetail" class="form-control form-control-sm" readonly />
+                    </div>
+                </form>
+
+            </div>
+        </div>
+    </div>
+</div>

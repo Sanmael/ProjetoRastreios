@@ -1,0 +1,115 @@
+﻿<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <title>Landing Page</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.0/css/bootstrap.min.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+</head>
+<style>
+    
+    body {
+        background-image: url('https://blog.quantosobra.com.br/static/f988bea8b56c18242741833a9b7d2dfc/40f67/aprenda-a-fazer-entregas-pelos-correios_quanto-sobra.webp');
+        background-size: auto; 
+        background-repeat: no-repeat; 
+        background-position: center center; 
+    }
+    
+    .conteudo {
+        text-align: center;
+        padding: 100px;
+        color: #fff;
+        font-size: 24px;
+    }
+</style>
+
+
+<style>
+    .landing-content {
+        opacity: 0;
+        padding: 20px;
+        border-radius: 10px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+        margin-bottom: 20px;
+        max-height: 0;
+        overflow: hidden;
+        transition: opacity 0.5s, max-height 0.5s;
+    }
+</style>
+
+<body>
+
+
+    <div class="container mt-4">    
+        <div class="row">
+            <div class="col-md-6 offset-md-3">
+                <div class="alert alert-primary landing-content text-center" role="alert" id="popup1">
+                    Bem-vindo ao nosso site de consultas de entregas dos Correios! Realize consultas de suas encomendas e envie notificações por e-mail para seus clientes.
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="container mt-4">
+        <div class="row">
+            <div class="col-md-6 offset-md-3">
+                <div class="alert alert-primary landing-content text-center" role="alert" id="popup1">
+                    <p>
+                        Descubra a rapidez e facilidade das consultas de entregas dos Correios em nosso site! Com apenas alguns
+                        cliques, você terá acesso imediato ao status de suas encomendas. Não perca mais tempo pesquisando pelos
+                        rastreamentos, pois enviaremos as atualizações automaticamente para você. Agilize seu dia a dia e tenha
+                        controle total sobre suas entregas com a nossa plataforma de consultas.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="container mt-4">
+        <div class="row">
+            <div class="col-md-6 offset-md-3 ">
+               
+                <div class="alert alert-primary text-center landing-content" role="alert" id="popup2">
+                    <p>
+                        Simplificamos as consultas de entregas dos Correios! Agora você pode receber todas as atualizações dos
+                        seus envios diretamente em seu email. Basta cadastrar-se em nossa plataforma e configurar as preferências
+                        de notificações. Dessa forma, você não precisa pesquisar pelos códigos de rastreamento, pois todas as
+                        informações serão enviadas automaticamente para você. Aproveite a comodidade de gerenciar suas entregas
+                        por email e mantenha seus clientes informados em tempo real.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    
+    <script src="~/js/jquery.js"></script>
+    <script>
+        $(document).ready(function () {
+            function showPopup(popup) {
+                popup.animate({ opacity: 1, maxHeight: '300px' }, 500);
+            }
+
+            function hidePopup(popup) {
+                popup.animate({ opacity: 0, maxHeight: '0' }, 500);
+            }
+
+            function createPopups(popups, index) {
+                if (index < popups.length) {
+                    showPopup($(popups[index]));
+                    setTimeout(function () {
+                        createPopups(popups, index + 1);
+                    }, 2000);
+                }
+            }
+
+            var popups = $(".landing-content").toArray();
+
+            createPopups(popups, 0);
+        });
+    </script>
+
+</body>
+
+</html>

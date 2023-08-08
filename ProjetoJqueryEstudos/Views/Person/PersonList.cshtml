@@ -1,0 +1,125 @@
+﻿@model IEnumerable<ProjetoJqueryEstudos.Models.SubPersonModel>
+
+<div class="row mb-3">
+    <div class="col-md-12">
+        <h3>Filtros</h3>
+        @using (Html.BeginForm("GetPersonListFilter", "Person", FormMethod.Post))
+        {
+            <div class="row">
+                <div class="form-group col-md-3">
+                    <label>Nome:</label>
+                    @Html.TextBox("firstNameFilter", null, new { @class = "form-control" })
+                </div>
+                <div class="form-group col-md-3">
+                    <label>Sobrenome:</label>
+                    @Html.TextBox("lastNameFilter", null, new { @class = "form-control" })
+                </div>
+                <div class="form-group col-md-3">
+                    <label>CPF:</label>
+                    @Html.TextBox("taxNumberFilter", null, new { @class = "form-control" })
+                </div>
+                <div class="form-group col-md-3">
+                    <label>Email:</label>
+                    @Html.TextBox("emailFilter", null, new { @class = "form-control" })
+                </div>
+                  <div class="form-group col-md-3">
+                    <label>Endereço:</label>
+                    @Html.TextBox("addressFilter", null, new { @class = "form-control" })
+                </div>
+            </div>
+            <hr />
+
+            <button type="submit" id="submitFilter" class="btn btn-primary">Filtrar</button>
+
+        }
+    </div>
+</div>
+<hr />
+
+<div class="row">
+    <div class="col-md-12">
+        <h3 class="text-center">Lista de Pessoas</h3>
+        <br />
+        <table class="table table-bordered table-striped">
+            <thead>
+                <tr>
+                    <th>Nome</th>
+                    <th>Sobrenome</th>
+                    <th>CPF</th>
+                    <th>Email</th>
+                    <th>Ações</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var pessoa in Model)
+                {
+                    <tr>
+                        <td>@pessoa.FirstName</td>
+                        <td>@pessoa.LastName</td>
+                        <td>@pessoa.TaxNumber</td>
+                        <td>@pessoa.Email</td>
+                        <td>
+                            <button type="button" id="@pessoa.PersonId" onclick="OpenModalRemove(@pessoa.PersonId)" class="btn btn-outline-danger">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash" viewBox="0 0 16 16">
+                                    <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5Zm2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5Zm3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0V6Z"></path>
+                                    <path d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1v1ZM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4H4.118ZM2.5 3h11V2h-11v1Z"></path>
+                                </svg>
+                            </button>
+                            <button type="button" id="@pessoa.PersonId" onclick="OpenModalAddressDetail(@pessoa.PersonId)" class="btn btn-outline-primary">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-list-task" viewBox="0 0 16 16">
+                                    <path fill-rule="evenodd" d="M2 2.5a.5.5 0 0 0-.5.5v1a.5.5 0 0 0 .5.5h1a.5.5 0 0 0 .5-.5V3a.5.5 0 0 0-.5-.5H2zM3 3H2v1h1V3z" />
+                                    <path d="M5 3.5a.5.5 0 0 1 .5-.5h9a.5.5 0 0 1 0 1h-9a.5.5 0 0 1-.5-.5zM5.5 7a.5.5 0 0 0 0 1h9a.5.5 0 0 0 0-1h-9zm0 4a.5.5 0 0 0 0 1h9a.5.5 0 0 0 0-1h-9z" />
+                                    <path fill-rule="evenodd" d="M1.5 7a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5H2a.5.5 0 0 1-.5-.5V7zM2 7h1v1H2V7zm0 3.5a.5.5 0 0 0-.5.5v1a.5.5 0 0 0 .5.5h1a.5.5 0 0 0 .5-.5v-1a.5.5 0 0 0-.5-.5H2zm1 .5H2v1h1v-1z" />
+                                </svg>
+                            </button>
+                            <a asp-controller="Person" asp-action="PersonEdit" asp-route-id="@pessoa.PersonId" class="btn btn-outline-primary">
+                                <svg xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 576 512">
+                                    <path d="M402.6 83.2l90.2 90.2c3.8 3.8 3.8 10 0 13.8L274.4 405.6l-92.8 10.3c-12.4 1.4-22.9-9.1-21.5-21.5l10.3-92.8L388.8 83.2c3.8-3.8 10-3.8 13.8 0zm162-22.9l-48.8-48.8c-15.2-15.2-39.9-15.2-55.2 0l-35.4 35.4c-3.8 3.8-3.8 10 0 13.8l90.2 90.2c3.8 3.8 10 3.8 13.8 0l35.4-35.4c15.2-15.3 15.2-40 0-55.2zM384 346.2V448H64V128h229.8c3.2 0 6.2-1.3 8.5-3.5l40-40c7.6-7.6 2.2-20.5-8.5-20.5H48C21.5 64 0 85.5 0 112v352c0 26.5 21.5 48 48 48h352c26.5 0 48-21.5 48-48V306.2c0-10.7-12.9-16-20.5-8.5l-40 40c-2.2 2.3-3.5 5.3-3.5 8.5z" />
+                                </svg>
+                            </a>
+                            <button type="button" class="btn btn-primary" data-toggle="modal" onclick="AbrirModalComId(@pessoa.PersonId)" data-target="#modalDeCadastroRastreio" data-subpersonid="@pessoa.PersonId">Novo Rastreio</button>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<hr />
+
+<partial name="_PersonDeleteModal" />
+<partial name="_AddressDetail" />
+
+
+<script src="~/js/PersonCreate.js"></script>
+<script src="~/js/jquery.js"></script>
+<script src="~/js/Person.js"></script>
+
+
+<div class="modal fade" id="modalDeCadastroRastreio" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">New message</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form>
+                    <input type="hidden" id="subPersonIdInput" />
+
+                    <div class="form-group">
+                        <label for="recipient-name" class="col-form-label">Recipient:</label>
+                        <input type="text" class="form-control" id="codigoDeRastreio">
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary">Send message</button>
+            </div>
+        </div>
+    </div>
+</div>

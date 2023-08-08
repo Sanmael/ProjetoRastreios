@@ -1,0 +1,22 @@
+﻿@page "/example"
+
+@using System.Net.Http
+@using Newtonsoft.Json;
+
+<h1>Exemplo de Requisição HTTP</h1>
+
+@code {
+    [Inject]
+    private HttpClient httpClient { get; set; }
+
+    private JsonContent userInfo;
+
+    protected override async Task OnInitializedAsync()
+    {
+        HttpContext httpContext = JsonConvert.SerializeObject(userInfo);
+        httpClient.PostAsync("",)
+    }
+
+}
+
+
