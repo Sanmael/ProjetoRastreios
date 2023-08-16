@@ -1,8 +1,6 @@
-using Microsoft.AspNetCore.Identity;
+using MeuContexto.Context;
+using MeuContexto.UOW;
 using Microsoft.EntityFrameworkCore;
-using ProjetoJqueryEstudos.Context;
-using ProjetoJqueryEstudos.Entities;
-using ProjetoJqueryEstudos.UOW;
 using SendNotification;
 
 IHost host = Host.CreateDefaultBuilder(args)

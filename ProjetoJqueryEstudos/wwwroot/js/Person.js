@@ -60,7 +60,6 @@ function OpenModalAddressDetail(id) {
     });
 }
 
-
 $(document).on("click", "#modalDeCadastroRastreio .btn-primary", function () {
     var codigoDeRastreio = $("#codigoDeRastreio").val();
     var subPersonId = $("#subPersonIdInput").val();
@@ -73,10 +72,10 @@ $(document).on("click", "#modalDeCadastroRastreio .btn-primary", function () {
         method: "POST",
         success: function (result) {
             if (result.success) {
-                alert(result.message)
+                alert("Codigo de rastreio adicionado com sucesso!");
                 window.location.reload();
             }
-            else
+            else if (result.message != null)
                 alert(result.message)
         }
     });

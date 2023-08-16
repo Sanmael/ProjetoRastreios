@@ -1,89 +1,154 @@
-﻿using Humanizer;
-using ProjetoJqueryEstudos.UOW;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Mail;
 using System.Net;
 using System.Text;
 using System.Threading.Tasks;
-using ProjetoJqueryEstudos.Entities;
 using System.Text.Json;
 using System.Web;
-using Newtonsoft.Json;
 using SendNotification.DTO;
+using Microsoft.AspNetCore.Http;
+using System.Globalization;
+using Entities;
+using MeuContexto.UOW;
+using Newtonsoft.Json;
+using Microsoft.Extensions.Logging;
 
 namespace SendNotification.Service
 {
     internal class SendEmail
     {
         private readonly IUnitOfWork _unitOfWork;
+        private readonly int MaxDegreeOfParallelism = 10;
+        private readonly IConfiguration _configuration;
 
-        public SendEmail(IUnitOfWork unitOfWork)
+        public SendEmail(IUnitOfWork unitOfWork, IConfiguration configuration)
         {
             _unitOfWork = unitOfWork;
+            _configuration = configuration;
         }
 
-        public async Task SendMailAsync()
+        public async Task GetCodesAsync()
         {
-            IEnumerable<IGrouping<int, TrackingCode>> codes = _unitOfWork.TrackingService.GetTrackingCodeActive().GroupBy(x => x.SubPersonId);
+            List<TrackingCode> codes = _unitOfWork.TrackingService.GetTrackingCodeActive();
 
-            foreach (var code in codes)
+            //refatorar depois
+            ParallelOptions parallelOptions = new ParallelOptions();
+            parallelOptions.MaxDegreeOfParallelism = 10;
+
+            Parallel.ForEach(codes, parallelOptions, code =>
             {
-                SubPerson subPerson = _unitOfWork.SubPersonService.GetSubPersonById(code.Key);
+                ProcessTrackingCodeAsync(code);
+            });
+        }
 
-                List<TrackingCode> trackingCodes = _unitOfWork.TrackingService.GetTrackingCodeBySubPerson((int)subPerson.SubPersonId);
+        public async Task ProcessTrackingCodeAsync(TrackingCode trackingCode)
+        {
+            try
+            {
+                string apiUrl = $"{_configuration["ApiConfig:Url"]}{trackingCode.Code}";
 
-                foreach (var trackingCode in trackingCodes)
+                using (HttpClient httpClient = new HttpClient())
                 {
-                    string apiUrl = $"https://api.linketrack.com/track/json?user=Samunickinho@gmail.com&token=930b33d20f9de2a0b83bc0740d5b236a415306c8ed4ae8cbf41111f70b23a9ef&codigo={trackingCode.Code}";
+                    UriBuilder requestUri = new UriBuilder(apiUrl);
 
-                    using (HttpClient httpClient = new HttpClient())
+                    var query = HttpUtility.ParseQueryString(requestUri.Query);
+                    query["user"] = _configuration["ApiConfig:User"];
+                    query["token"] = _configuration["ApiConfig:Token"];
+                    query["codigo"] = trackingCode.Code;
+
+                    requestUri.Query = query.ToString();
+
+                    HttpResponseMessage response = await httpClient.GetAsync(requestUri.ToString());
+
+                    if (response.IsSuccessStatusCode)
                     {
-                        var requestUri = new UriBuilder(apiUrl);
-                        var query = HttpUtility.ParseQueryString(requestUri.Query);
-                        query["user"] = "Samunickinho@gmail.com";
-                        query["token"] = "930b33d20f9de2a0b83bc0740d5b236a415306c8ed4ae8cbf41111f70b23a9ef";
-                        query["codigo"] = trackingCode.Code;
-                        requestUri.Query = query.ToString();
+                        string responseBody = response.Content.ReadAsStringAsync().Result;
 
-                        HttpResponseMessage response = await httpClient.GetAsync(requestUri.ToString());
+                        TrackingInfoDto trackingInfo = JsonConvert.DeserializeObject<TrackingInfoDto>(responseBody);
 
-                        if (response.IsSuccessStatusCode)
+                        TrackingCodeEvents lastEventAdd = _unitOfWork.TrackingCodeEvents.GetTrackingEventsByTrackingCodeId(trackingCode.TrackingCodeId).OrderBy(x => x.CreationDate).OrderByDescending(x => x.CreationDate).FirstOrDefault();
+
+                        UpdateAndValidateTrackingCodeStatusAsync(trackingCode, lastEventAdd, trackingInfo.eventos);
+
+                        if (trackingInfo.eventos != null && trackingInfo.eventos.Any())
                         {
-                            string responseBody = response.Content.ReadAsStringAsync().Result;
+                            SaveNewEvents(trackingCode, trackingInfo.eventos);
 
-                            TrackingInfo trackingInfo = JsonConvert.DeserializeObject<TrackingInfo>(responseBody);
-
-                            if (trackingInfo.eventos != null && trackingInfo.eventos.Count > 0)
-                            {
-                                Event lastEvent = trackingInfo.eventos.First();
-
-                                if (lastEvent.status == "Objeto entregue ao destinatário")
-                                {
-                                    trackingCode.Status = TrackingCodeStatus.Delivered;
-                                    _unitOfWork.TrackingService.UpdateTrackingCode(trackingCode);
-                                    continue;
-                                }
-
-                                TrackingCodeEvents trackingCodeEventModel = new TrackingCodeEvents()
-                                {
-                                    TrakingCodeId = trackingCode.TrackingCodeId,
-                                    CreationDate = DateTime.Now,
-                                    Status = lastEvent.status,
-                                    Local = lastEvent.local
-                                };
-
-                                _unitOfWork.TrackingCodeEvents.NewTrackingCodeEvents(trackingCodeEventModel);
-                            }
+                            NexTry(trackingCode, 3);
                         }
-
-                        trackingCode.NextSearch = DateTime.Now.AddHours(2);
-
-                        _unitOfWork.TrackingService.UpdateTrackingCode(trackingCode);
                     }
+                    else if (response.StatusCode == HttpStatusCode.RequestTimeout || response.StatusCode == HttpStatusCode.InternalServerError)
+                        NexTry(trackingCode, 3);
+
+                    else
+                        SetError(trackingCode);
                 }
             }
+            catch (Exception ex)
+            {
+                _unitOfWork.LoggerService.LogError(ex, ex.Message);
+            }
+        }
+        public void UpdateAndValidateTrackingCodeStatusAsync(TrackingCode trackingCode, TrackingCodeEvents lastEvent, List<EventDto> events)
+        {
+            if (lastEvent != null)
+            {
+                if (lastEvent.Status == "Objeto entregue ao destinatário")
+                {
+                    trackingCode.Status = TrackingCodeStatus.Delivered;
+                    _unitOfWork.TrackingService.UpdateTrackingCode(trackingCode);
+                    return;
+                }
+
+                events.RemoveAll(x => DateTime.Parse(x.data).Add(TimeSpan.Parse(x.hora)) <= lastEvent.CreationDate);
+            }
+            else if (lastEvent == null && !events.Any())
+            {
+                trackingCode.NumberOfTries++;
+
+                if (trackingCode.NumberOfTries == 3)
+                {
+                    SetError(trackingCode);
+                }
+
+                NexTry(trackingCode, 1);
+
+                return;
+            }
+        }
+        public void SaveNewEvents(TrackingCode trackingCode, List<EventDto> events)
+        {
+            foreach (EventDto evento in events)
+            {
+                if (TimeSpan.TryParseExact(evento.hora, "hh\\:mm", CultureInfo.InvariantCulture, out TimeSpan horaMinuto) &&
+                    DateTime.TryParseExact(evento.data, "dd/MM/yyyy", CultureInfo.InvariantCulture, DateTimeStyles.None, out DateTime data))
+                {
+                    DateTime datetime = data.Add(horaMinuto);
+
+                    TrackingCodeEvents trackingCodeEventModel = new TrackingCodeEvents()
+                    {
+                        TrakingCodeId = trackingCode.TrackingCodeId,
+                        CreationDate = datetime,
+                        Status = evento.status,
+                        Local = evento.local
+                    };
+
+                    _unitOfWork.TrackingCodeEvents.NewTrackingCodeEvents(trackingCodeEventModel);
+                }
+            }
+
+        }
+        public void NexTry(TrackingCode trackingCode, double hour)
+        {
+            trackingCode.NextSearch = DateTime.Now.AddHours(hour);
+            _unitOfWork.TrackingService.UpdateTrackingCode(trackingCode);
+        }
+        public void SetError(TrackingCode trackingCode)
+        {
+            trackingCode.Status = TrackingCodeStatus.Error;
+            _unitOfWork.TrackingService.UpdateTrackingCode(trackingCode);
         }
     }
 }

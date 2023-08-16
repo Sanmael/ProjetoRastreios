@@ -1,5 +1,5 @@
+using MeuContexto.UOW;
 using Microsoft.Extensions.DependencyInjection;
-using ProjetoJqueryEstudos.UOW;
 using SendNotification.Service;
 using System;
 using static System.Formats.Asn1.AsnWriter;
@@ -10,13 +10,13 @@ namespace SendNotification
     {
         private readonly ILogger<Worker> _logger;
         private readonly IServiceProvider _serviceProvider;
+        private readonly IConfiguration _configuration;
 
-
-        public Worker(ILogger<Worker> logger, IServiceProvider serviceProvider)
+        public Worker(ILogger<Worker> logger, IServiceProvider serviceProvider, IConfiguration configuration)
         {
             _logger = logger;
             _serviceProvider = serviceProvider;
-
+            _configuration = configuration;
         }
 
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
@@ -29,7 +29,7 @@ namespace SendNotification
                 {
                     var unitOfWork = scope.ServiceProvider.GetRequiredService<IUnitOfWork>();
 
-                    new SendEmail(unitOfWork).SendMailAsync();
+                    await new SendEmail(unitOfWork,_configuration).GetCodesAsync();
 
                     await Task.Delay(20000, stoppingToken);
                 }

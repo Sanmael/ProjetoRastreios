@@ -1,35 +1,33 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using ProjetoJqueryEstudos.Entities;
-using ProjetoJqueryEstudos.Interfaces;
 using ProjetoJqueryEstudos.Models;
-using ProjetoJqueryEstudos.Service;
-using ProjetoJqueryEstudos.Transactions;
-using ProjetoJqueryEstudos.UOW;
-using ProjetoJqueryEstudos.Utils;
 using System.Net;
 using System.Security.Claims;
 using System;
+using Service.Transactions;
+using Service;
+using Service.Models;
+using Entities;
+using Service.Utils;
 
 namespace ProjetoJqueryEstudos.Controllers
 {
     public class UserController : Controller
     {
-        private readonly IUnitOfWork _unitOfWork;
+        private readonly IUserTransaction _userTransaction;
         private readonly PersonTransaction _personTransaction;
-
-        public UserController(IUnitOfWork unitOfWork, PersonTransaction personTransaction)
+        public UserController(IUserTransaction userTransaction, PersonTransaction personTransaction)
         {
-            _unitOfWork = unitOfWork;
+            _userTransaction = userTransaction;
             _personTransaction = personTransaction;
         }
         [HttpPost]
-        public async Task<IActionResult> Login(LoginModel model)
+        public IActionResult Login(LoginModel model)
         {
             try
             {
-                bool result = await _unitOfWork.UserService.Login(model.Email, model.Password);
+                bool result = _userTransaction.LoginAsync(model.Email, model.Password).Result;
 
-                return Json(new { Success = result, RedirectUrl = "https://localhost:7186/Home/IsLogged" });
+                return Json(new { Success = result, RedirectUrl = "Home/IsLogged" });
             }
             catch (PortalException ex)
             {
@@ -55,25 +53,24 @@ namespace ProjetoJqueryEstudos.Controllers
 
             try
             {
-                bool result = await _unitOfWork.UserService.Register(model.Email, model.Password);
+                PersonModel person = new PersonModel(model.FirstName, model.LastName, model.TaxNumber, model.Email);
+
+                person.TaxNumber = person.TaxNumber.Replace("-", "").Replace(".", "").Replace(" ", "");
+
+                _personTransaction.ValidateIfExistPerson(person.TaxNumber, person.Email);
+
+                bool result = _userTransaction.RegisterAsync(model.Email, model.Password).Result;
 
                 if (result)
                 {
-                    Person person = new Person(model.FirstName, model.LastName,model.TaxNumber,model.Email);
+                    string userId = _userTransaction.GetUserIdByEmail(model.Email);
 
-                    UserIdentity userId = _unitOfWork.UserService.GetUserByEmail(model.Email);
-
-                    _personTransaction.ValidateIfExistPerson(person);
-
-                    Address address = new Address(person.PersonId,model.City,model.State, model.PostalCode,model.Neighborhood,model.PublicPlace, isPrincipalAddress :true);
-
-                    await _personTransaction.SaveNewPersonAsync(person, address, userId.Id);
+                    await _personTransaction.SaveNewPersonAsync(person, userId, model.City, model.State, model.PostalCode, model.Neighborhood, model.PublicPlace, isPrincipalAddress: true);
 
                     return Json(new { success = true });
                 }
 
                 return Json(new { success = false, message = "Campos preenchidos incorretamente!" });
-
             }
             catch (PortalException ex)
             {
@@ -84,7 +81,7 @@ namespace ProjetoJqueryEstudos.Controllers
                 return Json(new { success = false, message = MessageService.ErrorServer });
             }
         }
-
+        [HttpPost]
         public async Task<IActionResult> Logout()
         {
             try
@@ -92,9 +89,9 @@ namespace ProjetoJqueryEstudos.Controllers
                 if (User?.Identity?.Name == null)
                     throw new PortalException("Não há usuario conectado!");
 
-                await _unitOfWork.UserService.Logout();
+                await _userTransaction.Logout();
 
-                return Redirect("/Person/PersonList");
+                return Redirect("/Home/Index");
             }
             catch (PortalException ex)
             {

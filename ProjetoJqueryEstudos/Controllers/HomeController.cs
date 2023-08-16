@@ -1,6 +1,5 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using ProjetoJqueryEstudos.Models;
 using System.Diagnostics;
 
 namespace ProjetoJqueryEstudos.Controllers

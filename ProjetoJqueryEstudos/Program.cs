@@ -1,19 +1,10 @@
-using Microsoft.AspNetCore.Authentication;
+using DependenceInjection;
 using Microsoft.AspNetCore.Authentication.OpenIdConnect;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Mvc.Authorization;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Infrastructure;
-using Microsoft.EntityFrameworkCore.Infrastructure.Internal;
+
 using Microsoft.Identity.Web;
 using Microsoft.Identity.Web.UI;
-using ProjetoJqueryEstudos.Context;
-using ProjetoJqueryEstudos.Entities;
-using ProjetoJqueryEstudos.Interfaces;
-using ProjetoJqueryEstudos.Service;
-using ProjetoJqueryEstudos.Transactions;
-using ProjetoJqueryEstudos.UOW;
+using Service;
+using Service.Transactions;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -22,15 +13,8 @@ builder.Services.AddAuthentication(OpenIdConnectDefaults.AuthenticationScheme)
     .AddMicrosoftIdentityWebApp(builder.Configuration.GetSection("AzureAd"));
 
 
+Dependences.AddInfrastructure(builder.Services);
 
-string connectionString = "Data Source=DESKTOP-AUTOI40\\SQLEXPRESS;Initial Catalog=NomeDoBancoDeDados;Integrated Security=True;Encrypt=False";
-
-builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
-builder.Services.AddScoped<PersonTransaction>();
-builder.Services.AddIdentity<UserIdentity, IdentityRole>().AddEntityFrameworkStores<AppDbContext>().AddDefaultTokenProviders();
-builder.Services.AddScoped<SeedUserRoleInitial>();
-builder.Services.ConfigureApplicationCookie(options => options.AccessDeniedPath = "");
-builder.Services.AddDbContext<AppDbContext>(options => options.UseSqlServer(connectionString));
 builder.Services.AddControllersWithViews(options =>
 {
 
@@ -48,19 +32,10 @@ if (!app.Environment.IsDevelopment())
 }
 
 
-
 app.UseHttpsRedirection();
 app.UseStaticFiles();
 
 app.UseRouting();
-
-
-using (var scope = app.Services.CreateScope())
-{
-    var seedUserRoleInitial = scope.ServiceProvider.GetRequiredService<SeedUserRoleInitial>();
-    seedUserRoleInitial.SeedRoles();
-    seedUserRoleInitial.SeedUsers();
-}
 
 
 app.UseAuthentication();

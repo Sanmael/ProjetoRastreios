@@ -94,7 +94,7 @@ function resetForm() {
 }
 
 function validateCPF(cpf) {
-    const cpfValue = document.getElementById('cpf').value;
+    const cpfValue = document.getElementById('taxNumberInput').value;
     const cpfPattern = /^\d{3}\.\d{3}\.\d{3}-\d{2}$/;
 
     if (!cpfPattern.test(cpfValue)) {
