@@ -1,5 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using ProjetoJqueryEstudos.Models;
+using FrontEnd.Models;
 using System.Net;
 using System.Security.Claims;
 using System;
@@ -9,7 +9,7 @@ using Service.Models;
 using Entities;
 using Service.Utils;
 
-namespace ProjetoJqueryEstudos.Controllers
+namespace FrontEnd.Controllers
 {
     public class UserController : Controller
     {

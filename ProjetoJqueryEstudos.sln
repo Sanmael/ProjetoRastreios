@@ -3,12 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.6.33829.357
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ProjetoJqueryEstudos", "ProjetoJqueryEstudos\ProjetoJqueryEstudos.csproj", "{81D14207-60F1-458F-8370-5C2F0819B8C1}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SendNotification", "SendNotification\SendNotification.csproj", "{CB9F9226-B549-476A-9BFF-BC8AAD258218}"
-	ProjectSection(ProjectDependencies) = postProject
-		{81D14207-60F1-458F-8370-5C2F0819B8C1} = {81D14207-60F1-458F-8370-5C2F0819B8C1}
-	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Entities", "Entities\Entities.csproj", "{D24C5226-B770-4F57-A151-2B6E8BEFFFBE}"
 EndProject
@@ -16,7 +11,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Service", "Service\Service.
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MeuContexto", "MeuContexto\MeuContexto.csproj", "{DED7A1A3-9CB2-446C-837A-7A5D1276EA47}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DependenceInjection", "DependenceInjection\DependenceInjection.csproj", "{C46F5543-3BFC-46CC-B3CD-3A705CB6626C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DependenceInjection", "DependenceInjection\DependenceInjection.csproj", "{C46F5543-3BFC-46CC-B3CD-3A705CB6626C}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FrontEnd", "FrontEnd\FrontEnd.csproj", "{CA79BE95-85D6-4300-B4B4-C47FFE8FC502}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -24,10 +21,6 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{81D14207-60F1-458F-8370-5C2F0819B8C1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{81D14207-60F1-458F-8370-5C2F0819B8C1}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{81D14207-60F1-458F-8370-5C2F0819B8C1}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{81D14207-60F1-458F-8370-5C2F0819B8C1}.Release|Any CPU.Build.0 = Release|Any CPU
 		{CB9F9226-B549-476A-9BFF-BC8AAD258218}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{CB9F9226-B549-476A-9BFF-BC8AAD258218}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{CB9F9226-B549-476A-9BFF-BC8AAD258218}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -48,6 +41,10 @@ Global
 		{C46F5543-3BFC-46CC-B3CD-3A705CB6626C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C46F5543-3BFC-46CC-B3CD-3A705CB6626C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C46F5543-3BFC-46CC-B3CD-3A705CB6626C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CA79BE95-85D6-4300-B4B4-C47FFE8FC502}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CA79BE95-85D6-4300-B4B4-C47FFE8FC502}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CA79BE95-85D6-4300-B4B4-C47FFE8FC502}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CA79BE95-85D6-4300-B4B4-C47FFE8FC502}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

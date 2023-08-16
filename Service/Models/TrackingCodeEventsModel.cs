@@ -1,4 +1,4 @@
-﻿namespace ProjetoJqueryEstudos.Models
+﻿namespace FrontEnd.Models
 {
     public class TrackingCodeEventsModel
     {

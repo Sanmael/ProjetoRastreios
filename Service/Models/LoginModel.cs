@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace ProjetoJqueryEstudos.Models
+namespace FrontEnd.Models
 {
     public class LoginModel
     {

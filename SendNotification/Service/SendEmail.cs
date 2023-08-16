@@ -20,7 +20,6 @@ namespace SendNotification.Service
     internal class SendEmail
     {
         private readonly IUnitOfWork _unitOfWork;
-        private readonly int MaxDegreeOfParallelism = 10;
         private readonly IConfiguration _configuration;
 
         public SendEmail(IUnitOfWork unitOfWork, IConfiguration configuration)

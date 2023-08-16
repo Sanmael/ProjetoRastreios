@@ -1,12 +1,12 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using ProjetoJqueryEstudos.Models;
+using FrontEnd.Models;
 using Service;
 using Service.Models;
 using Service.Transactions;
 using Service.Utils;
 using System.Security.Claims;
 
-namespace ProjetoJqueryEstudos.Controllers
+namespace FrontEnd.Controllers
 {
     public class TrackingController : Controller
     {

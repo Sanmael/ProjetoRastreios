@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
 
-namespace ProjetoJqueryEstudos.Controllers
+namespace FrontEnd.Controllers
 {
     public class HomeController : Controller
     {

@@ -1,4 +1,4 @@
-namespace ProjetoJqueryEstudos
+namespace FrontEnd
 {
     public class ErrorViewModel
     {

@@ -1,6 +1,6 @@
 ﻿using Entities;
 using MeuContexto.UOW;
-using ProjetoJqueryEstudos.Models;
+using FrontEnd.Models;
 using Service.Mapper;
 using Service.Models;
 using Service.Utils;
