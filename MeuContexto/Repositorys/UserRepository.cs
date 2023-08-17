@@ -1,7 +1,7 @@
 ﻿using Entities.Interfaces;
 using Microsoft.AspNetCore.Identity;
 
-namespace MeuContexto.Service
+namespace MeuContexto.Repositorys
 {
     public class UserRepository : IUserService
     {

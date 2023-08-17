@@ -3,7 +3,7 @@ using Entities.Interfaces;
 using System;
 using System.Linq.Expressions;
 
-namespace MeuContexto.Service
+namespace MeuContexto.Repositorys
 {
     public class PersonRepository : IPersonRepository
     {

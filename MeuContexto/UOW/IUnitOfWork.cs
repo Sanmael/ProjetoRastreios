@@ -12,5 +12,6 @@ namespace MeuContexto.UOW
         public ISubPersonRepository SubPersonService { get; }
         public ITrackingRepository TrackingService { get; }
         public ITrackingCodeEventsRepository TrackingCodeEvents { get; }
+        public IMailQueueRepository MailQueueRepository { get; }
     }
 }

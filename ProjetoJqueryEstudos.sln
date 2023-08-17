@@ -15,6 +15,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DependenceInjection", "Depe
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FrontEnd", "FrontEnd\FrontEnd.csproj", "{CA79BE95-85D6-4300-B4B4-C47FFE8FC502}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SendTrackingMail", "SendTrackingMail\SendTrackingMail.csproj", "{BFA52B66-F808-4F56-AED8-3D4AAF17BC85}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -45,6 +47,10 @@ Global
 		{CA79BE95-85D6-4300-B4B4-C47FFE8FC502}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{CA79BE95-85D6-4300-B4B4-C47FFE8FC502}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{CA79BE95-85D6-4300-B4B4-C47FFE8FC502}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BFA52B66-F808-4F56-AED8-3D4AAF17BC85}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BFA52B66-F808-4F56-AED8-3D4AAF17BC85}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BFA52B66-F808-4F56-AED8-3D4AAF17BC85}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BFA52B66-F808-4F56-AED8-3D4AAF17BC85}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

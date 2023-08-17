@@ -8,7 +8,6 @@
         public void DeleteSubPerson(SubPerson subPerson);
         public SubPerson GetSubPersonById(int subPersonId);
         public SubPerson GetSubPersonByPersonAndSubPersonId(int subPersonId, int personId);
-        public List<SubPerson> GetPersonsByProc(string sql);
-
+        public List<SubPerson> GetSubPersonsFilter(string sql);       
     }
 }

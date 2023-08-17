@@ -1,7 +1,7 @@
 ﻿using Entities;
 using Entities.Interfaces;
 
-namespace MeuContexto.Service
+namespace MeuContexto.Repositorys
 {
     public class TrackingCodeEventsRepository : ITrackingCodeEventsRepository
     {

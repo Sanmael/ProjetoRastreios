@@ -1,4 +1,4 @@
-﻿namespace MeuContexto.Service
+﻿namespace MeuContexto.Repositorys
 {
     using Entities;
     using Entities.Interfaces;

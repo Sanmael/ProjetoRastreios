@@ -1,19 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net.Mail;
-using System.Net;
-using System.Text;
-using System.Threading.Tasks;
-using System.Text.Json;
+﻿using System.Net;
 using System.Web;
 using SendNotification.DTO;
-using Microsoft.AspNetCore.Http;
 using System.Globalization;
 using Entities;
 using MeuContexto.UOW;
 using Newtonsoft.Json;
-using Microsoft.Extensions.Logging;
+using Azure;
+using System.Diagnostics.SymbolStore;
+using System.Threading.Tasks;
 
 namespace SendNotification.Service
 {
@@ -32,63 +26,71 @@ namespace SendNotification.Service
         {
             List<TrackingCode> codes = _unitOfWork.TrackingService.GetTrackingCodeActive();
 
+            IEnumerable<IGrouping<int, TrackingCode>> trackingCodes = codes.GroupBy(x => x.SubPersonId);
             //refatorar depois
-            ParallelOptions parallelOptions = new ParallelOptions();
-            parallelOptions.MaxDegreeOfParallelism = 10;
-
-            Parallel.ForEach(codes, parallelOptions, code =>
+            foreach (IGrouping<int, TrackingCode> trackingCode in trackingCodes)
             {
-                ProcessTrackingCodeAsync(code);
-            });
+                SubPerson subPerson = _unitOfWork.SubPersonService.GetSubPersonById(trackingCode.Key);
+
+                List<TrackingCode> trackingCodesSubPerson = trackingCode.Where(x => x.SubPersonId == subPerson.SubPersonId).ToList();
+
+                await ProcessTrackingCodeAsync(trackingCodesSubPerson, subPerson);
+            }
         }
-
-        public async Task ProcessTrackingCodeAsync(TrackingCode trackingCode)
+        public async Task ProcessTrackingCodeAsync(List<TrackingCode> trackingCode, SubPerson subPerson)
         {
-            try
+            foreach (TrackingCode code in trackingCode)
             {
-                string apiUrl = $"{_configuration["ApiConfig:Url"]}{trackingCode.Code}";
-
-                using (HttpClient httpClient = new HttpClient())
+                try
                 {
-                    UriBuilder requestUri = new UriBuilder(apiUrl);
+                    string apiUrl = $"{_configuration["ApiConfig:Url"]}{code.Code}";
 
-                    var query = HttpUtility.ParseQueryString(requestUri.Query);
-                    query["user"] = _configuration["ApiConfig:User"];
-                    query["token"] = _configuration["ApiConfig:Token"];
-                    query["codigo"] = trackingCode.Code;
-
-                    requestUri.Query = query.ToString();
-
-                    HttpResponseMessage response = await httpClient.GetAsync(requestUri.ToString());
-
-                    if (response.IsSuccessStatusCode)
+                    using (HttpClient httpClient = new HttpClient())
                     {
-                        string responseBody = response.Content.ReadAsStringAsync().Result;
+                        UriBuilder requestUri = new UriBuilder(apiUrl);
 
-                        TrackingInfoDto trackingInfo = JsonConvert.DeserializeObject<TrackingInfoDto>(responseBody);
+                        var query = HttpUtility.ParseQueryString(requestUri.Query);
+                        query["user"] = _configuration["ApiConfig:User"];
+                        query["token"] = _configuration["ApiConfig:Token"];
+                        query["codigo"] = code.Code;
 
-                        TrackingCodeEvents lastEventAdd = _unitOfWork.TrackingCodeEvents.GetTrackingEventsByTrackingCodeId(trackingCode.TrackingCodeId).OrderBy(x => x.CreationDate).OrderByDescending(x => x.CreationDate).FirstOrDefault();
+                        requestUri.Query = query.ToString();
 
-                        UpdateAndValidateTrackingCodeStatusAsync(trackingCode, lastEventAdd, trackingInfo.eventos);
+                        HttpResponseMessage response = await httpClient.GetAsync(requestUri.ToString());
 
-                        if (trackingInfo.eventos != null && trackingInfo.eventos.Any())
-                        {
-                            SaveNewEvents(trackingCode, trackingInfo.eventos);
-
-                            NexTry(trackingCode, 3);
-                        }
+                        await ValidateResponseAsync(response, code, subPerson);
                     }
-                    else if (response.StatusCode == HttpStatusCode.RequestTimeout || response.StatusCode == HttpStatusCode.InternalServerError)
-                        NexTry(trackingCode, 3);
-
-                    else
-                        SetError(trackingCode);
+                }
+                catch (Exception ex)
+                {
+                    _unitOfWork.LoggerService.LogError(ex, ex.Message);
                 }
             }
-            catch (Exception ex)
+        }
+        public async Task ValidateResponseAsync(HttpResponseMessage response, TrackingCode trackingCode, SubPerson subPerson)
+        {
+            if (response.IsSuccessStatusCode)
             {
-                _unitOfWork.LoggerService.LogError(ex, ex.Message);
+                string responseBody = await response.Content.ReadAsStringAsync();
+
+                TrackingInfoDto trackingInfo = JsonConvert.DeserializeObject<TrackingInfoDto>(responseBody);
+
+                TrackingCodeEvents lastEventAdd = _unitOfWork.TrackingCodeEvents.GetTrackingEventsByTrackingCodeId(trackingCode.TrackingCodeId).OrderBy(x => x.CreationDate).OrderByDescending(x => x.CreationDate).FirstOrDefault();
+
+                UpdateAndValidateTrackingCodeStatusAsync(trackingCode, lastEventAdd, trackingInfo.eventos);
+
+                if (trackingInfo.eventos != null && trackingInfo.eventos.Any())
+                {
+                    SaveNewEvents(trackingCode, trackingInfo.eventos, subPerson);
+
+                    NexTry(trackingCode, 3);
+                }
             }
+            else if (response.StatusCode == HttpStatusCode.RequestTimeout || response.StatusCode == HttpStatusCode.InternalServerError)
+                NexTry(trackingCode, 3);
+
+            else
+                SetError(trackingCode);
         }
         public void UpdateAndValidateTrackingCodeStatusAsync(TrackingCode trackingCode, TrackingCodeEvents lastEvent, List<EventDto> events)
         {
@@ -113,11 +115,9 @@ namespace SendNotification.Service
                 }
 
                 NexTry(trackingCode, 1);
-
-                return;
             }
         }
-        public void SaveNewEvents(TrackingCode trackingCode, List<EventDto> events)
+        public void SaveNewEvents(TrackingCode trackingCode, List<EventDto> events, SubPerson subPerson)
         {
             foreach (EventDto evento in events)
             {
@@ -138,6 +138,9 @@ namespace SendNotification.Service
                 }
             }
 
+            //EventDto eventDto = events.First();
+
+            //_unitOfWork.MailQueueRepository.AddNewMailQueue(subPerson.Email, eventDto.subStatus, )
         }
         public void NexTry(TrackingCode trackingCode, double hour)
         {

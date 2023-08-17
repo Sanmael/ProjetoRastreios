@@ -34,7 +34,7 @@ namespace Service.Transactions
                 @Email = {(emailFilter != null ? $"N'{emailFilter}'" : "NULL")}, 
                 @PostalCode = {(addressFilter != null ? $"N'{addressFilter}'" : "NULL")}".Replace("\r\n", "");
 
-                List<SubPersonModel> personsFilter = _unitOfWork.SubPersonService.GetPersonsByProc(sql).Select(x => Mappers.MapToViewModel<SubPerson, SubPersonModel>(x)).ToList();
+                List<SubPersonModel> personsFilter = _unitOfWork.SubPersonService.GetSubPersonsFilter(sql).Select(x => Mappers.MapToViewModel<SubPerson, SubPersonModel>(x)).ToList();
                 personsFilter.ForEach(x => x.TaxNumber = _unitOfWork.PersonService.GetPersonById(x.PersonId).TaxNumber);
 
                 return personsFilter;

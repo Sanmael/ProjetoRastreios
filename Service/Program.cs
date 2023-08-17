@@ -1,11 +1,12 @@
 using MeuContexto.Context;
-using MeuContexto.Service;
+
 using MeuContexto;
 using MeuContexto.UOW;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Service.Transactions;
 using Service;
+using MeuContexto.Repositorys;
 
 var builder = WebApplication.CreateBuilder(args);
 

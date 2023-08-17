@@ -1,7 +1,7 @@
 ﻿using Entities;
 using Entities.Interfaces;
 
-namespace MeuContexto.Service
+namespace MeuContexto.Repositorys
 {
     public class SubPersonRepository : ISubPersonRepository
     {
@@ -16,11 +16,19 @@ namespace MeuContexto.Service
         {
             _repository.SaveEntity(subPerson);
         }
-        public List<SubPerson> GetPersonsByProc(string sql)
+        public List<SubPerson> GetSubPersonsFilter(string sql)
         {          
-            List<SubPerson> personModels = _repository.GetEntityByProcedure<SubPerson>(sql).ToList();
+            List<SubPerson> subPersons = _repository.GetEntityByProcedure<SubPerson>(sql).ToList();
 
-            return personModels;
+            return subPersons;
+        }
+        public List<SubPerson> GetSubPersonsTrackingCodeSend()
+        {
+            string sql = "Exec GetSubPersonsTrackingCodeSend";
+
+            List<SubPerson> subPersons = _repository.GetEntityByProcedure<SubPerson>(sql).ToList();
+
+            return subPersons;
         }
         public void DeleteSubPerson(SubPerson subPerson)
         {

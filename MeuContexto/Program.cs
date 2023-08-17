@@ -1,6 +1,6 @@
 using MeuContexto;
 using MeuContexto.Context;
-using MeuContexto.Service;
+using MeuContexto.Repositorys;
 using MeuContexto.UOW;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;

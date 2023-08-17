@@ -2,15 +2,17 @@
 using MeuContexto;
 using MeuContexto.Context;
 using MeuContexto.Repositorie;
-using MeuContexto.Service;
+using MeuContexto.Repositorys;
 using MeuContexto.UOW;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
+using System;
 
 namespace MeuContexto.UOW
 {
     public class UnitOfWork : IUnitOfWork
     {
-        private readonly IRepository _repository;
+        private IRepository _repository;
         private readonly IAddressRepository _iAddressService;
         private readonly IPersonRepository _iPersonService;
         private readonly IUserService _iuserServices;
@@ -18,28 +20,26 @@ namespace MeuContexto.UOW
         private readonly ITrackingRepository _iTrackingService;
         private readonly ISubPersonRepository _iSubPersonService;
         private readonly ITrackingCodeEventsRepository _iTrackingCodeEvents;
+        private readonly IMailQueueRepository _iMailQueueRepository;
         private readonly SignInManager<UserIdentity> _signInManager;
         private readonly UserManager<UserIdentity> _userManager;
-
         public UnitOfWork(AppDbContext appDbContext, SignInManager<UserIdentity> signInManager, UserManager<UserIdentity> userManager)
         {
             _repository = new Repository(appDbContext);
             _signInManager = signInManager;
             _userManager = userManager;
         }
-
         public UnitOfWork(AppDbContext appDbContext)
         {
             _repository = new Repository(appDbContext);
         }
-
         public IAddressRepository AddressService
         {
             get
             {
                 return _iAddressService ?? new AddressRepository(_repository);
             }
-        }
+        }       
 
         public IPersonRepository PersonService
         {
@@ -81,6 +81,13 @@ namespace MeuContexto.UOW
             get
             {
                 return _iTrackingCodeEvents ?? new TrackingCodeEventsRepository(_repository);
+            }
+        }
+        public IMailQueueRepository MailQueueRepository
+        {
+            get
+            {
+                return _iMailQueueRepository ?? new MailQueueRepository(_repository);
             }
         }
     }
