@@ -19,7 +19,7 @@ namespace FrontEnd.Controllers
             _trackingTransaction = trackingTransaction;
         }
         [HttpPost]
-        public IActionResult NewTrackingCode(string code, string subPersonId)
+        public async Task<IActionResult> NewTrackingCodeAsync(string code, string subPersonId)
         {
             try
             {
@@ -29,7 +29,7 @@ namespace FrontEnd.Controllers
 
                 bool validateSubPerson = _personTransaction.IsSubPersonOwnedByCurrentUserAsync(userId, long.Parse(subPersonId)).Result;
 
-                bool validateCode = _trackingTransaction.TrackingCodeExist(code);
+                bool validateCode = await _trackingTransaction.TrackingCodeExist(code);
 
                 if (!validateSubPerson)
                     return Json(new { success = false, message = "person não correspondente!" });
@@ -76,7 +76,7 @@ namespace FrontEnd.Controllers
         {
             try
             {
-                List<TrackingCodeEventsModel> trackingCodes = _trackingTransaction.GetTrackinEventsById(trackingCodeId);
+                List<TrackingCodeEventsModel> trackingCodes =  _trackingTransaction.GetTrackinEventsByIdAsync(trackingCodeId).Result;
 
                 if (trackingCodes.Any())
                 {

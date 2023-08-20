@@ -11,19 +11,25 @@ namespace MeuContexto.Repositorys
         {
             _repository = repository;
         }
-        public void NewTrackingCodeEvents(TrackingCodeEvents trackingCodeEvents)
+        public async Task NewTrackingCodeEventsAsync(TrackingCodeEvents trackingCodeEvents)
         {
-            _repository.SaveEntity(trackingCodeEvents);
+            await _repository.SaveEntityAsync(trackingCodeEvents);
         }
-        public void DeleteTrackingEvents(TrackingCodeEvents trackingCodeEvents)
+        public async Task DeleteTrackingEventsAsync(TrackingCodeEvents trackingCodeEvents)
         {
-            _repository.RemoveEntity(trackingCodeEvents);
-        }
-
-        public List<TrackingCodeEvents> GetTrackingEventsByTrackingCodeId(long trackingCode)
-        {
-            return _repository.GetEntitys<TrackingCodeEvents>(x => x.TrakingCodeId == trackingCode).ToList();
+            await _repository.RemoveEntityAsync(trackingCodeEvents);
         }
 
+        public async Task<List<TrackingCodeEvents>> GetTrackingEventsByTrackingCodeIdAsync(long trackingCode)
+        {
+            return await _repository.GetEntitys<TrackingCodeEvents>(x => x.TrakingCodeId == trackingCode);
+        }
+
+        public async Task<TrackingCodeEvents> GetLastTrackingCodeByTrackingCodeId(long trackingCodeid)
+        {
+            var teste = await _repository.GetEntityByProcedure<TrackingCodeEvents>(proc: $"select top 1 * from TrackingCodeEvents where TrakingCodeId = {trackingCodeid}", parameters: null);
+
+            return teste.FirstOrDefault();
+        }
     }
 }

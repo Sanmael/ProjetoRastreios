@@ -1,4 +1,5 @@
 using MeuContexto.UOW;
+using SendTrackingMail.Service;
 
 namespace SendTrackingMail
 {
@@ -24,7 +25,7 @@ namespace SendTrackingMail
                 {
                     var unitOfWork = scope.ServiceProvider.GetRequiredService<IUnitOfWork>();
 
-                    //await new SendEmail(unitOfWork, _configuration).GetCodesAsync();
+                    await new SendTrackingCode(unitOfWork).GetMailQueuesAsync();
 
                     await Task.Delay(20000, stoppingToken);
                 }

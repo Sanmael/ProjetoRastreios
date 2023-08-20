@@ -34,8 +34,8 @@ namespace Service.Transactions
                 @Email = {(emailFilter != null ? $"N'{emailFilter}'" : "NULL")}, 
                 @PostalCode = {(addressFilter != null ? $"N'{addressFilter}'" : "NULL")}".Replace("\r\n", "");
 
-                List<SubPersonModel> personsFilter = _unitOfWork.SubPersonService.GetSubPersonsFilter(sql).Select(x => Mappers.MapToViewModel<SubPerson, SubPersonModel>(x)).ToList();
-                personsFilter.ForEach(x => x.TaxNumber = _unitOfWork.PersonService.GetPersonById(x.PersonId).TaxNumber);
+                List<SubPersonModel> personsFilter = _unitOfWork.SubPersonService.GetSubPersonsFilter(sql).Result.Select(x => Mappers.MapToViewModel<SubPerson, SubPersonModel>(x)).ToList();
+                personsFilter.ForEach(x => x.TaxNumber = _unitOfWork.PersonService.GetPersonByIdAsync(x.PersonId).Result.TaxNumber);
 
                 return personsFilter;
             }
@@ -49,10 +49,10 @@ namespace Service.Transactions
         {
             try
             {
-                if (_unitOfWork.PersonService.GetPersonByTaxNumber(taxNumber) != null)
+                if (_unitOfWork.PersonService.GetPersonByTaxNumberAsync(taxNumber) != null)
                     throw new PortalException("Cpf já está sendo usado");
 
-                if (_unitOfWork.PersonService.GetPersonByEmail(email) != null)
+                if (_unitOfWork.PersonService.GetPersonByEmailAsync(email) != null)
                     throw new PortalException("Email já está sendo usado");
             }
             catch (PortalException pt)
@@ -71,7 +71,7 @@ namespace Service.Transactions
             {
                 Person person = Mappers.MapToViewModel<PersonModel, Person>(personModel);
 
-                _unitOfWork.PersonService.SaveNewPerson(person);
+                _unitOfWork.PersonService.SaveNewPersonAsync(person);
 
                 await _unitOfWork.UserService.UpdateUserIdentityPerson(userId, person.PersonId);
 
@@ -113,7 +113,7 @@ namespace Service.Transactions
         {
             try
             {
-                long personId = _unitOfWork.PersonService.GetPersonById(userId).PersonId;
+                long personId = _unitOfWork.PersonService.GetPersonByIdAsync(userId).Result.PersonId;
 
                 return personId;
             }
@@ -131,7 +131,7 @@ namespace Service.Transactions
         {
             int personid = await _unitOfWork.UserService.GetPersonIdByUserId(userId);
 
-            List<SubPerson> subsPerson = _unitOfWork.SubPersonService.GetAllSubPersonByPerson(personid);
+            List<SubPerson> subsPerson = await _unitOfWork.SubPersonService.GetAllSubPersonByPersonAsync(personid);
 
             return subsPerson.Where(x => x.SubPersonId == subPersonId).Any();
         }
@@ -139,7 +139,7 @@ namespace Service.Transactions
         public void AddNewSubPerson(SubPersonModel subPerson)
         {
             SubPerson person = Mappers.MapToViewModel<SubPersonModel, SubPerson>(subPerson);
-            _unitOfWork.SubPersonService.AddNewSubPerson(person);
+            _unitOfWork.SubPersonService.AddNewSubPersonAsync(person);
         }
        
     }

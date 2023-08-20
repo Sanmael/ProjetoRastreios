@@ -63,7 +63,7 @@ namespace FrontEnd.Controllers
 
                 if (result)
                 {
-                    string userId = _userTransaction.GetUserIdByEmail(model.Email);
+                    string userId = await _userTransaction.GetUserIdByEmailAsync(model.Email);
 
                     await _personTransaction.SaveNewPersonAsync(person, userId, model.City, model.State, model.PostalCode, model.Neighborhood, model.PublicPlace, isPrincipalAddress: true);
 

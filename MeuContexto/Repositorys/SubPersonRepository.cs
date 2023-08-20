@@ -12,41 +12,41 @@ namespace MeuContexto.Repositorys
             _repository = repository;
         }
 
-        public void AddNewSubPerson(SubPerson subPerson)
+        public async Task AddNewSubPersonAsync(SubPerson subPerson)
         {
-            _repository.SaveEntity(subPerson);
+            await _repository.SaveEntityAsync(subPerson);
         }
-        public List<SubPerson> GetSubPersonsFilter(string sql)
+        public async Task<List<SubPerson>> GetSubPersonsFilter(string sql)
         {          
-            List<SubPerson> subPersons = _repository.GetEntityByProcedure<SubPerson>(sql).ToList();
+            List<SubPerson> subPersons = await _repository.GetEntityByProcedure<SubPerson>(sql);
 
             return subPersons;
         }
-        public List<SubPerson> GetSubPersonsTrackingCodeSend()
+        public async Task<List<SubPerson>> GetSubPersonsTrackingCodeSendAsync()
         {
             string sql = "Exec GetSubPersonsTrackingCodeSend";
 
-            List<SubPerson> subPersons = _repository.GetEntityByProcedure<SubPerson>(sql).ToList();
+            List<SubPerson> subPersons = await _repository.GetEntityByProcedure<SubPerson>(sql);
 
             return subPersons;
         }
-        public void DeleteSubPerson(SubPerson subPerson)
+        public async Task DeleteSubPersonAsync(SubPerson subPerson)
         {
-            _repository.RemoveEntity(subPerson);
+            await _repository.RemoveEntityAsync(subPerson);
         }
 
-        public List<SubPerson> GetAllSubPersonByPerson(long personId)
+        public async Task<List<SubPerson>> GetAllSubPersonByPersonAsync(long personId)
         {
-            return _repository.GetEntitys<SubPerson>(x => x.PersonId == personId).ToList();
+            return await _repository.GetEntitys<SubPerson>(x => x.PersonId == personId);
         }
 
-        public SubPerson GetSubPersonById(int subPersonId)
+        public async Task<SubPerson> GetSubPersonByIdAsync(int subPersonId)
         {
-            return _repository.GetEntity<SubPerson>(x => x.SubPersonId == subPersonId);
+            return await _repository.GetEntityAsync<SubPerson>(x => x.SubPersonId == subPersonId);
         }
-        public SubPerson GetSubPersonByPersonAndSubPersonId(int subPersonId, int personId)
+        public async Task<SubPerson> GetSubPersonByPersonAndSubPersonId(int subPersonId, int personId)
         {
-            return _repository.GetEntity<SubPerson>(x => x.PersonId == personId && x.SubPersonId == subPersonId);
+            return await _repository.GetEntityAsync<SubPerson>(x => x.PersonId == personId && x.SubPersonId == subPersonId);
         }
     }
 }

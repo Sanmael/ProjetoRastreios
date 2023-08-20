@@ -1,7 +1,10 @@
-﻿namespace Entities
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace Entities
 {
     public class TrackingCode
     {
+        [Key] // Aplicando o KeyAttribute à propriedade
         public int TrackingCodeId { get; set; }
         public string Code { get; set; }
         public int SubPersonId { get; set; }

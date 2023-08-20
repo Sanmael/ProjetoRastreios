@@ -23,24 +23,14 @@ namespace MeuContexto.UOW
         private readonly IMailQueueRepository _iMailQueueRepository;
         private readonly SignInManager<UserIdentity> _signInManager;
         private readonly UserManager<UserIdentity> _userManager;
-        public UnitOfWork(AppDbContext appDbContext, SignInManager<UserIdentity> signInManager, UserManager<UserIdentity> userManager)
-        {
-            _repository = new Repository(appDbContext);
-            _signInManager = signInManager;
-            _userManager = userManager;
-        }
-        public UnitOfWork(AppDbContext appDbContext)
-        {
-            _repository = new Repository(appDbContext);
-        }
+
         public IAddressRepository AddressService
         {
             get
             {
                 return _iAddressService ?? new AddressRepository(_repository);
             }
-        }       
-
+        }
         public IPersonRepository PersonService
         {
             get
@@ -90,7 +80,25 @@ namespace MeuContexto.UOW
                 return _iMailQueueRepository ?? new MailQueueRepository(_repository);
             }
         }
-    }
+
+
+        public UnitOfWork(AppDbContext appDbContext, SignInManager<UserIdentity> signInManager, UserManager<UserIdentity> userManager)
+        {
+            _repository = new EntityRepository(appDbContext);
+            _signInManager = signInManager;
+            _userManager = userManager;
+        }
+        //refatorar gambiarra depois
+        public UnitOfWork()
+        {
+            _repository = new DapperRepository(new DbSession("Data Source=DESKTOP-AUTOI40\\SQLEXPRESS;Initial Catalog=NomeDoBancoDeDados;Integrated Security=True;Encrypt=False"));
+        }
+        public UnitOfWork(AppDbContext appDbContext)
+        {
+            _repository = new EntityRepository(appDbContext);
+        }
+    }   
 }
+
 
 

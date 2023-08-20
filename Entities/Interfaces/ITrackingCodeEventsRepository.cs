@@ -3,9 +3,10 @@ namespace Entities.Interfaces
 {
     public interface ITrackingCodeEventsRepository
     {
-        public void NewTrackingCodeEvents(TrackingCodeEvents trackingCodeEvents);
-        public void DeleteTrackingEvents(TrackingCodeEvents trackingCodeEvents);
-        public List<TrackingCodeEvents> GetTrackingEventsByTrackingCodeId(long trackingCode);
+        public Task NewTrackingCodeEventsAsync(TrackingCodeEvents trackingCodeEvents);
+        public Task DeleteTrackingEventsAsync(TrackingCodeEvents trackingCodeEvents);
+        public Task<List<TrackingCodeEvents>> GetTrackingEventsByTrackingCodeIdAsync(long trackingCode);
+        public Task<TrackingCodeEvents> GetLastTrackingCodeByTrackingCodeId(long trackingCodeid);
 
     }
 }

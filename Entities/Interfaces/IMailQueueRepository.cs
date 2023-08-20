@@ -9,6 +9,6 @@ namespace Entities.Interfaces
 {
     public interface IMailQueueRepository
     {
-        public void AddNewMailQueue(string toEmail, string message, string subject, string body);
+        public Task AddNewMailQueueAsync(string toEmail, string message, string subject, string body);
     }
 }

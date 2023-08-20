@@ -12,51 +12,51 @@ namespace MeuContexto.Repositorys
             this.repository = repository;
         }
 
-        public void DeleteTrackingCode(TrackingCode trackingCode)
+        public async Task DeleteTrackingCodeAsync(TrackingCode trackingCode)
         {
-            repository.RemoveEntity(trackingCode);
+            await repository.RemoveEntityAsync(trackingCode);
         }
 
-        public void DeleteTrackingCodeById(long trackingCodeId)
+        public async Task DeleteTrackingCodeByIdAsync(long trackingCodeId)
         {
-            TrackingCode trackingCode = repository.GetEntity<TrackingCode>(x=> x.TrackingCodeId == trackingCodeId);
-            repository.RemoveEntity(trackingCode);
+            TrackingCode trackingCode = await repository.GetEntityAsync<TrackingCode>(x=> x.TrackingCodeId == trackingCodeId);
+            await repository.RemoveEntityAsync(trackingCode);
         }
 
-        public List<TrackingCode> GetTrackingCodeActive()
+        public async Task<List<TrackingCode>> GetTrackingCodeActiveAsync()
         {
-            return repository.GetEntitys<TrackingCode>(x => x.Status == TrackingCodeStatus.Active && x.NextSearch <= DateTime.Now).ToList();
+            return await repository.GetEntityByProcedure<TrackingCode>(proc: "select * from TrackingCode where status = 0 and NextSearch <= getdate()", parameters: null);
         }
 
-        public TrackingCode GetTrackingCodeByCode(string code)
+        public async Task<TrackingCode> GetTrackingCodeByCodeAsync(string code)
         {
-            return repository.GetEntity<TrackingCode>(x => x.Code.Equals(code));
+            return await repository.GetEntityAsync<TrackingCode>(x => x.Code.Equals(code));
         }
 
-        public List<TrackingCode> GetTrackingCodeBySubPerson(int subPersonId)
+        public async Task<List<TrackingCode>> GetTrackingCodeBySubPersonAsync(int subPersonId)
         {
-            return repository.GetEntitys<TrackingCode>(x => x.SubPersonId == subPersonId && x.Status == TrackingCodeStatus.Active && x.NextSearch <= DateTime.Now).ToList();
+            return await repository.GetEntitys<TrackingCode>(x => x.SubPersonId == subPersonId && x.Status == TrackingCodeStatus.Active && x.NextSearch <= DateTime.Now);
         }
 
-        public List<TrackingCode> GetTrackingCodeBySubPersonEvents(int subPersonId)
+        public async Task<List<TrackingCode>> GetTrackingCodeBySubPersonEventsAsync(int subPersonId)
         {
             var sql = $@"EXEC GetTrackingCodeBySubPersonId 
             @subPersonId = {(subPersonId != null ? $"N'{subPersonId}'" : "NULL")}";
 
             sql = sql.Replace("\r\n", "");
 
-            return repository.GetEntityByProcedure<TrackingCode>(sql);
+            return  await repository.GetEntityByProcedure<TrackingCode>(sql);
         }
 
-        public void NewTrackingCode(TrackingCode trackingCode)
+        public async Task NewTrackingCodeAsync(TrackingCode trackingCode)
         {
-            repository.SaveEntity<TrackingCode>(trackingCode);
+            await repository.SaveEntityAsync<TrackingCode>(trackingCode);
         }
 
 
-        public void UpdateTrackingCode(TrackingCode trackingCode)
+        public async Task UpdateTrackingCode(TrackingCode trackingCode)
         {
-            repository.UpdateEntity<TrackingCode>(trackingCode);
+            await repository.UpdateEntityAsync<TrackingCode>(trackingCode);
         }
     }
 }

@@ -16,17 +16,17 @@ namespace Service.MapperEntityToDto
 
         public void AddNewPerson(SubPersonModel subPersonModel)
         {
-            _subPersonRepository.AddNewSubPerson(Mappers.MapToViewModel<SubPersonModel,SubPerson>(subPersonModel));
+             _subPersonRepository.AddNewSubPersonAsync(Mappers.MapToViewModel<SubPersonModel,SubPerson>(subPersonModel));
         }
         public void DeleteSubPerson(SubPersonModel subPersonModel)
         {
-            _subPersonRepository.DeleteSubPerson(Mappers.MapToViewModel<SubPersonModel, SubPerson>(subPersonModel));
+             _subPersonRepository.DeleteSubPersonAsync(Mappers.MapToViewModel<SubPersonModel, SubPerson>(subPersonModel));
         }
 
         public List<SubPersonModel> GetAllSubPersonByPerson(long personId)
         {
             List<SubPersonModel>subPersons = new List<SubPersonModel>();
-            List<SubPerson> subPeople = _subPersonRepository.GetAllSubPersonByPerson(personId);
+            List<SubPerson> subPeople = _subPersonRepository.GetAllSubPersonByPersonAsync(personId).Result;
             subPeople.ForEach(x => subPersons.Add(Mappers.MapToViewModel<SubPerson, SubPersonModel>(x)));
 
             return subPersons;
@@ -34,11 +34,11 @@ namespace Service.MapperEntityToDto
 
         public SubPersonModel GetSubPersonById(int subPersonId)
         {
-            return Mappers.MapToViewModel<SubPerson, SubPersonModel>(_subPersonRepository.GetSubPersonById(subPersonId));
+            return Mappers.MapToViewModel<SubPerson, SubPersonModel>(_subPersonRepository.GetSubPersonByIdAsync(subPersonId).Result);
         }
         public SubPersonModel GetSubPersonByPersonAndSubPersonId(int subPersonId, int personId)
         {
-            return Mappers.MapToViewModel<SubPerson, SubPersonModel>(_subPersonRepository.GetSubPersonByPersonAndSubPersonId(subPersonId,personId));
+            return Mappers.MapToViewModel<SubPerson, SubPersonModel>(_subPersonRepository.GetSubPersonByPersonAndSubPersonId(subPersonId,personId).Result);
         }
     }
 }

@@ -3,11 +3,11 @@
 {
     public interface ISubPersonRepository
     {
-        public List<SubPerson> GetAllSubPersonByPerson(long personId);
-        public void AddNewSubPerson(SubPerson subPerson);
-        public void DeleteSubPerson(SubPerson subPerson);
-        public SubPerson GetSubPersonById(int subPersonId);
-        public SubPerson GetSubPersonByPersonAndSubPersonId(int subPersonId, int personId);
-        public List<SubPerson> GetSubPersonsFilter(string sql);       
+        public Task<List<SubPerson>> GetAllSubPersonByPersonAsync(long personId);
+        public Task AddNewSubPersonAsync(SubPerson subPerson);
+        public Task DeleteSubPersonAsync(SubPerson subPerson);
+        public Task<SubPerson> GetSubPersonByIdAsync(int subPersonId);
+        public Task<SubPerson> GetSubPersonByPersonAndSubPersonId(int subPersonId, int personId);
+        public Task<List<SubPerson>> GetSubPersonsFilter(string sql);       
     }
 }

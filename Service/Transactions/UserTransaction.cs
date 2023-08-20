@@ -23,14 +23,14 @@ namespace Service.Transactions
         {
             return await _unitOfWork.UserService.Register(email, password);
         }
-        public string GetUserIdByEmail(string email)
+        public async Task<string> GetUserIdByEmailAsync(string email)
         {
-            return _unitOfWork.UserService.GetUserByEmail(email).Id;
+            return _unitOfWork.UserService.GetUserByEmailAsync(email).Result.Id;
         }
 
-        public Task<bool> Logout()
+        public async Task<bool> Logout()
         {
-            return _unitOfWork.UserService.Logout();
+            return await _unitOfWork.UserService.Logout();
         }
     }
 }

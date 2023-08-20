@@ -26,18 +26,18 @@ namespace MeuContexto.Repositorys
         {
             if (isPrincipalAddress)
             {
-                VerifyPrincipalAddres(personId);
+                VerifyPrincipalAddresAsync(personId);
             }
             address.PersonId = personId;
             address.isPrincipalAddress = isPrincipalAddress;
-            _repository.SaveEntity(address);
+            _repository.SaveEntityAsync(address);
         }
 
-        public Address GetAddressByCep(string cep, int personId)
+        public async Task<Address> GetAddressByCepAsync(string cep, int personId)
         {
             try
             {
-                Address address = _repository.GetEntity<Address>(x => x.PostalCode == cep && x.PersonId == personId);
+                Address address = await _repository.GetEntityAsync<Address>(x => x.PostalCode == cep && x.PersonId == personId);
 
                 return address;
             }
@@ -47,24 +47,24 @@ namespace MeuContexto.Repositorys
             }
         }
 
-        public Address GetAddressById(int id)
+        public async Task<Address> GetAddressById(int id)
         {
-            return _repository.GetEntity<Address>(x => x.PersonId == id);
+            return await _repository.GetEntityAsync<Address>(x => x.PersonId == id);
         }
 
-        public Address GetAddressPrincipal(int personId,bool isPrincipal)
+        public async Task<Address> GetAddressPrincipalAsync(int personId,bool isPrincipal)
         {
-            return _repository.GetEntity<Address>(x => x.PersonId == personId && x.isPrincipalAddress == true);
+            return await _repository.GetEntityAsync<Address>(x => x.PersonId == personId && x.isPrincipalAddress == true);
         }
 
-        private void VerifyPrincipalAddres(int personId)
+        private async Task VerifyPrincipalAddresAsync(int personId)
         {
-            Address address = _repository.GetEntity<Address>(x => x.PersonId == personId && x.isPrincipalAddress == true);
+            Address address = await _repository.GetEntityAsync<Address>(x => x.PersonId == personId && x.isPrincipalAddress == true);
 
             if (address != null)
             {
                 address.isPrincipalAddress = false;
-                _repository.UpdateEntity(address);
+                await _repository.UpdateEntityAsync(address);
             }
         }
     }

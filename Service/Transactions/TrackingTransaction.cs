@@ -14,9 +14,9 @@ namespace Service.Transactions
         {
             _unitOfWork = unitOfWork;
         }
-        public bool TrackingCodeExist(string code)
+        public async Task<bool> TrackingCodeExist(string code)
         {
-            TrackingCode trackingCode = _unitOfWork.TrackingService.GetTrackingCodeByCode(code);
+            TrackingCode trackingCode = await _unitOfWork.TrackingService.GetTrackingCodeByCodeAsync(code);
 
             return trackingCode != null;
         }
@@ -25,7 +25,7 @@ namespace Service.Transactions
 
             TrackingCode trackingCode = new TrackingCode(code, subPersonId);
 
-            _unitOfWork.TrackingService.NewTrackingCode(trackingCode);
+            _unitOfWork.TrackingService.NewTrackingCodeAsync(trackingCode);
         }
         public void ValidateTrackingCode(string code)
         {
@@ -39,37 +39,37 @@ namespace Service.Transactions
 
             validateUtils.ValidateSegment(code, index: 2, size: 9, shouldBeNumber: true);
         }
-        public List<TrackingCodeModel> GetTrackingCodesByPerson(long subPersonId)
+        public async Task<List<TrackingCodeModel>> GetTrackingCodesByPersonAsync(long subPersonId)
         {
-            return _unitOfWork.TrackingService.GetTrackingCodeBySubPerson((int)subPersonId).Select(x => Mappers.MapToViewModel<TrackingCode, TrackingCodeModel>(x)).ToList();
+            return _unitOfWork.TrackingService.GetTrackingCodeBySubPersonAsync((int)subPersonId).Result.Select(x => Mappers.MapToViewModel<TrackingCode, TrackingCodeModel>(x)).ToList();
         }
         public List<TrackingCodeModel> GetTrackingCodesByPersonAndTrackingCodeEventsNotNull(long subPersonId)
         {
-            return _unitOfWork.TrackingService.GetTrackingCodeBySubPersonEvents((int)subPersonId).Select(x => Mappers.MapToViewModel<TrackingCode, TrackingCodeModel>(x)).ToList();
+            return _unitOfWork.TrackingService.GetTrackingCodeBySubPersonEventsAsync((int)subPersonId).Result.Select(x => Mappers.MapToViewModel<TrackingCode, TrackingCodeModel>(x)).ToList();
         }
-        public List<TrackingCodeEventsModel> GetTrackinEventsById(int trackingCodeEvents)
+        public async Task<List<TrackingCodeEventsModel>> GetTrackinEventsByIdAsync(int trackingCodeEvents)
         {
-            return _unitOfWork.TrackingCodeEvents.GetTrackingEventsByTrackingCodeId(trackingCodeEvents).Select(x => Mappers.MapToViewModel<TrackingCodeEvents, TrackingCodeEventsModel>(x)).ToList();
+            return _unitOfWork.TrackingCodeEvents.GetTrackingEventsByTrackingCodeIdAsync(trackingCodeEvents).Result.Select(x => Mappers.MapToViewModel<TrackingCodeEvents, TrackingCodeEventsModel>(x)).ToList();
         }
-        public void RemoveAllTrackingCodeEventsBySubPerson(long personId)
+        public async Task RemoveAllTrackingCodeEventsBySubPersonAsync(long personId)
         {
-            List<TrackingCode> trackingCodes = _unitOfWork.TrackingService.GetTrackingCodeBySubPersonEvents((int)personId);
+            List<TrackingCode> trackingCodes = await _unitOfWork.TrackingService.GetTrackingCodeBySubPersonEventsAsync((int)personId);
 
             foreach (TrackingCode code in trackingCodes)
             {
-                List<TrackingCodeEvents> trackingCodeEvents = _unitOfWork.TrackingCodeEvents.GetTrackingEventsByTrackingCodeId(code.TrackingCodeId);
+                List<TrackingCodeEvents> trackingCodeEvents = await _unitOfWork.TrackingCodeEvents.GetTrackingEventsByTrackingCodeIdAsync(code.TrackingCodeId);
 
                 foreach (TrackingCodeEvents events in trackingCodeEvents)
                 {
-                    _unitOfWork.TrackingCodeEvents.DeleteTrackingEvents(events);
+                    _unitOfWork.TrackingCodeEvents.DeleteTrackingEventsAsync(events);
                 }
 
-                _unitOfWork.TrackingService.DeleteTrackingCode(code);
+                _unitOfWork.TrackingService.DeleteTrackingCodeAsync(code);
             }
         }
         public void DeleteTrackingCodeById(long trackingCodeId)
         {
-            _unitOfWork.TrackingService.DeleteTrackingCodeById(trackingCodeId);
+            _unitOfWork.TrackingService.DeleteTrackingCodeByIdAsync(trackingCodeId);
         }
     }
 }

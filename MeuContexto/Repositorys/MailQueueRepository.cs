@@ -12,14 +12,14 @@ namespace MeuContexto.Repositorys
             _repository = repository;
         }
 
-        public void AddNewMailQueue(MailQueue mailQueue)
+        public async void AddNewMailQueue(MailQueue mailQueue)
         {
-            _repository.SaveEntity<MailQueue>(mailQueue);
+            await _repository.SaveEntityAsync<MailQueue>(mailQueue);
         }
 
-        public void AddNewMailQueue(string toEmail, string message, string subject, string body)
-        {            
-            _repository.SaveEntity(new MailQueue(toEmail,message,subject,body));
+        public async Task AddNewMailQueueAsync(string toEmail, string message, string subject, string body)
+        {
+            await _repository.SaveEntityAsync(new MailQueue(toEmail,message,subject,body));
         }
     }
 }

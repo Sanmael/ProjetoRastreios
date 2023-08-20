@@ -7,8 +7,8 @@ namespace Entities.Interfaces
         public void AddressSave(Address address, int personId, bool isPrincipalAddress = false);
         public void AddressRemove(Address address);
         public void AddressEdit(Address address);
-        public Address GetAddressById(int id);
-        public Address GetAddressPrincipal(int personId,bool isPrincipal);
-        public Address GetAddressByCep(string cep, int personId);
+        public Task<Address> GetAddressById(int id);
+        public Task<Address> GetAddressPrincipalAsync(int personId,bool isPrincipal);
+        public Task<Address> GetAddressByCepAsync(string cep, int personId);
     }
 }

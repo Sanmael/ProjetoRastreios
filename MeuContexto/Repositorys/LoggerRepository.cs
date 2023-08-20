@@ -23,11 +23,11 @@
             _repository = repository;
         }
 
-        public void LogError(Exception ex, string message)
+        public async void LogError(Exception ex, string message)
         {
             ErrorLog errorLog = new ErrorLog(DateTime.Now, message, ex.ToString());
 
-            _repository.SaveEntity(errorLog);
+            await _repository.SaveEntityAsync(errorLog);
         }
     }
 

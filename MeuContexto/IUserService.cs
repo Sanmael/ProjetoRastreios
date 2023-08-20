@@ -8,6 +8,6 @@ namespace MeuContexto
         public Task<bool> Logout();
         public Task UpdateUserIdentityPerson(string userId, int personId);
         public Task<int> GetPersonIdByUserId(string userId);
-        public UserIdentity GetUserByEmail(string email);
+        public Task<UserIdentity> GetUserByEmailAsync(string email);
     }
 }

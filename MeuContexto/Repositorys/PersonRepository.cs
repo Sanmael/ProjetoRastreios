@@ -26,45 +26,45 @@ namespace MeuContexto.Repositorys
 
         //    sql = sql.Replace("\r\n", "");
 
-        //    List<SubPersonModel> personModels = _repository.GetEntityByProcedure<Person>(sql).Select(x=> Mapper.MapToViewModel<Person, SubPersonModel>(x)).ToList();
+        //    List<SubPersonModel> personModels = await repository.GetEntityByProcedure<Person>(sql).Select(x=> Mapper.MapToViewModel<Person, SubPersonModel>(x)).ToList();
             
         //    return personModels;
         //}
 
-        public Person GetPersonByTaxNumber(string taxNumber)
+        public async Task<Person> GetPersonByTaxNumberAsync(string taxNumber)
         {
-            Person PersonTaxNumber = _repository.GetEntity<Person>(x => x.TaxNumber == taxNumber);
+            Person PersonTaxNumber = await _repository.GetEntityAsync<Person>(x => x.TaxNumber == taxNumber);
             return PersonTaxNumber;
         }
-        public Person GetPersonByEmail(string email)
+        public async Task<Person> GetPersonByEmailAsync(string email)
         {
-            Person PersonEmail = _repository.GetEntity<Person>(x => x.Email == email);
+            Person PersonEmail = await _repository.GetEntityAsync<Person>(x => x.Email == email);
             return PersonEmail;
         }
-        public Person GetPersonById(long id)
+        public async Task<Person> GetPersonByIdAsync(long id)
         {
-            Person PersonById = _repository.GetEntity<Person>(x => x.PersonId == id);
+            Person PersonById = await _repository.GetEntityAsync<Person>(x => x.PersonId == id);
             return PersonById;
         }
 
-        public void SaveNewPerson(Person person)
+        public async Task SaveNewPersonAsync(Person person)
         {
-            _repository.SaveEntity(person);
+            await _repository.SaveEntityAsync(person);
         }
 
-        public IEnumerable<Person> GetAllPerson()
+        public async Task<IEnumerable<Person>> GetAllPersonAsync()
         {
-            return _repository.GetEntitys<Person>();
+            return await _repository.GetEntitys<Person>();
         }
 
-        public void RemovePerson(Person person)
+        public async Task RemovePersonAsync(Person person)
         {
-            _repository.RemoveEntity(person);
+            await _repository.RemoveEntityAsync(person);
         }
 
-        public void UpdatePerson(Person person)
+        public async Task UpdatePersonAsync(Person person)
         {
-            _repository.UpdateEntity(person);
+            await _repository.UpdateEntityAsync(person);
         }
     }
 }

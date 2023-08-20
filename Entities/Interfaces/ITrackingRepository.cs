@@ -3,14 +3,14 @@ namespace Entities.Interfaces
 {
     public interface ITrackingRepository
     {
-        public void NewTrackingCode(TrackingCode trackingCode);
-        public void UpdateTrackingCode(TrackingCode trackingCode);
-        public void DeleteTrackingCode(TrackingCode trackingCode);
-        public void DeleteTrackingCodeById(long trackingCodeId);
-        public TrackingCode GetTrackingCodeByCode(string code);
-        public List<TrackingCode> GetTrackingCodeActive();
-        public List<TrackingCode> GetTrackingCodeBySubPerson(int subPersonId);
-        public List<TrackingCode> GetTrackingCodeBySubPersonEvents(int subPersonId);
+        public Task NewTrackingCodeAsync(TrackingCode trackingCode);
+        public Task UpdateTrackingCode(TrackingCode trackingCode);
+        public Task DeleteTrackingCodeAsync(TrackingCode trackingCode);
+        public Task DeleteTrackingCodeByIdAsync(long trackingCodeId);
+        public Task<TrackingCode> GetTrackingCodeByCodeAsync(string code);
+        public Task<List<TrackingCode>> GetTrackingCodeActiveAsync();
+        public Task<List<TrackingCode>> GetTrackingCodeBySubPersonAsync(int subPersonId);
+        public Task<List<TrackingCode>> GetTrackingCodeBySubPersonEventsAsync(int subPersonId);
 
     }
 }

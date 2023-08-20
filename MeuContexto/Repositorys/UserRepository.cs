@@ -90,9 +90,9 @@ namespace MeuContexto.Repositorys
             return (int)userIdentity.PersonId;
         }
 
-        public UserIdentity GetUserByEmail(string email)
+        public async Task<UserIdentity> GetUserByEmailAsync(string email)
         {
-            return repository.GetEntity<UserIdentity>(x=> x.Email == email);
+            return await repository.GetEntityAsync<UserIdentity>(x=> x.Email == email);
         }
     }
 }

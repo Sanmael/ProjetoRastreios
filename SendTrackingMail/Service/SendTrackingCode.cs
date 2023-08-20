@@ -13,17 +13,15 @@ namespace SendTrackingMail.Service
     internal class SendTrackingCode
     {
         private readonly IUnitOfWork _unitOfWork;
-        private readonly IConfiguration _configuration;
 
-        public SendTrackingCode(IUnitOfWork unitOfWork, IConfiguration configuration)
+        public SendTrackingCode(IUnitOfWork unitOfWork)
         {
             _unitOfWork = unitOfWork;
-            _configuration = configuration;
         }
 
         public async Task GetMailQueuesAsync()
         {
-            List<TrackingCode> codes = _unitOfWork.TrackingService.GetTrackingCodeActive();
+            List<TrackingCode> codes = await _unitOfWork.TrackingService.GetTrackingCodeActiveAsync();
 
             //refatorar depois
             ParallelOptions parallelOptions = new ParallelOptions();
