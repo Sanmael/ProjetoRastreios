@@ -1,13 +1,13 @@
-using Entities;
+using Domain;
 using MeuContexto;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
 namespace MeuContexto.Context
 {
-    public class AppDbContext : IdentityDbContext<UserIdentity>
+    public class EntityContext : IdentityDbContext<UserIdentity>
     {
-        public AppDbContext(DbContextOptions<AppDbContext> options) : base(options) { }
+        public EntityContext(DbContextOptions<EntityContext> options) : base(options) { }
         public DbSet<Person> Person { get; set; }
         public DbSet<SubPerson> SubPerson { get; set; }
         public DbSet<Address> Address { get; set; }

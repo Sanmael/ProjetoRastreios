@@ -1,6 +1,6 @@
-﻿using Entities;
+﻿using Domain;
 
-namespace Entities.Interfaces
+namespace Domain.Interfaces
 {
     public interface IPersonRepository
     {

@@ -3,10 +3,10 @@ using System.Data;
 
 namespace MeuContexto.Context
 {
-    public class DbSession : IDisposable
+    public class DapperContext : IDisposable
     {
         public IDbConnection DbConnection { get;}
-        public DbSession(string connectionString)
+        public DapperContext(string connectionString)
         {
             DbConnection = new SqlConnection(connectionString);
 

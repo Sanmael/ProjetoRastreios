@@ -13,7 +13,7 @@ builder.Services.AddAuthentication(OpenIdConnectDefaults.AuthenticationScheme)
     .AddMicrosoftIdentityWebApp(builder.Configuration.GetSection("AzureAd"));
 
 
-Dependences.AddInfrastructure(builder.Services);
+Dependences.AddInfrastructure(builder.Services,builder.Configuration);
 
 builder.Services.AddControllersWithViews(options =>
 {

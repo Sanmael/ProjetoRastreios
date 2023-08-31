@@ -5,7 +5,7 @@ VisualStudioVersion = 17.6.33829.357
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SendNotification", "SendNotification\SendNotification.csproj", "{CB9F9226-B549-476A-9BFF-BC8AAD258218}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Entities", "Entities\Entities.csproj", "{D24C5226-B770-4F57-A151-2B6E8BEFFFBE}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Domain", "Entities\Domain.csproj", "{D24C5226-B770-4F57-A151-2B6E8BEFFFBE}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Service", "Service\Service.csproj", "{042A9F45-4F91-4D68-A123-CD3C43AF59DE}"
 EndProject
@@ -15,7 +15,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DependenceInjection", "Depe
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FrontEnd", "FrontEnd\FrontEnd.csproj", "{CA79BE95-85D6-4300-B4B4-C47FFE8FC502}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SendTrackingMail", "SendTrackingMail\SendTrackingMail.csproj", "{BFA52B66-F808-4F56-AED8-3D4AAF17BC85}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SendTrackingMail", "SendTrackingMail\SendTrackingMail.csproj", "{BFA52B66-F808-4F56-AED8-3D4AAF17BC85}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

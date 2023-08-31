@@ -1,7 +1,7 @@
-﻿namespace MeuContexto.Repositorys
+﻿namespace MeuContexto.EntityRepositories
 {
-    using Entities;
-    using Entities.Interfaces;
+    using Domain;
+    using Domain.Interfaces;
     using Microsoft.EntityFrameworkCore;
     using Serilog;
     using System;

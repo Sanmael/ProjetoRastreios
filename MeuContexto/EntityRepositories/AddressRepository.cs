@@ -1,8 +1,9 @@
 ﻿
-using Entities;
-using Entities.Interfaces;
 
-namespace MeuContexto.Repositorys
+using Domain;
+using Domain.Interfaces;
+
+namespace MeuContexto.EntityRepositories
 {
     public class AddressRepository : IAddressRepository
     {

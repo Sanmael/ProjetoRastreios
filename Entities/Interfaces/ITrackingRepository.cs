@@ -1,5 +1,5 @@
 ﻿
-namespace Entities.Interfaces
+namespace Domain.Interfaces
 {
     public interface ITrackingRepository
     {

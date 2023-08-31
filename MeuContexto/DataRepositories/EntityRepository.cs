@@ -1,17 +1,17 @@
-﻿using Entities.Interfaces;
+﻿using Domain.Interfaces;
 using MeuContexto.Context;
 using Microsoft.EntityFrameworkCore;
 using System.Linq;
 using System.Reflection.Metadata;
 using System.Security.Cryptography;
 
-namespace MeuContexto.Repositorie
+namespace MeuContexto.DataEntityRepositories
 {
     public class EntityRepository : IRepository
     {
-        private readonly AppDbContext _appDbContext;
+        private readonly EntityContext _appDbContext;
 
-        public EntityRepository(AppDbContext appDbContext)
+        public EntityRepository(EntityContext appDbContext)
         {
             _appDbContext = appDbContext;
         }

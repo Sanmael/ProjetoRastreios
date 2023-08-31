@@ -1,5 +1,5 @@
-﻿using Entities;
-using Entities.Interfaces;
+﻿using Domain;
+using Domain.Interfaces;
 using Service.Mapper;
 using Service.Models;
 

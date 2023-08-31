@@ -1,7 +1,7 @@
-﻿using Entities;
-using Entities.Interfaces;
+﻿using Domain;
+using Domain.Interfaces;
 
-namespace MeuContexto.Repositorys
+namespace MeuContexto.EntityRepositories
 {
     public class SubPersonRepository : ISubPersonRepository
     {

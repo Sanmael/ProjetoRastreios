@@ -11,7 +11,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace MeuContexto.Migrations
 {
-    [DbContext(typeof(AppDbContext))]
+    [DbContext(typeof(EntityContext))]
     [Migration("20230815042559_adicaodenumberoftries")]
     partial class adicaodenumberoftries
     {
@@ -25,7 +25,7 @@ namespace MeuContexto.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
-            modelBuilder.Entity("Entities.Address", b =>
+            modelBuilder.Entity("Domain.Address", b =>
                 {
                     b.Property<int>("AddressId")
                         .ValueGeneratedOnAdd()
@@ -65,7 +65,7 @@ namespace MeuContexto.Migrations
                     b.ToTable("Address");
                 });
 
-            modelBuilder.Entity("Entities.ErrorLog", b =>
+            modelBuilder.Entity("Domain.ErrorLog", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -89,7 +89,7 @@ namespace MeuContexto.Migrations
                     b.ToTable("ErrorLog");
                 });
 
-            modelBuilder.Entity("Entities.Person", b =>
+            modelBuilder.Entity("Domain.Person", b =>
                 {
                     b.Property<int>("PersonId")
                         .ValueGeneratedOnAdd()
@@ -119,7 +119,7 @@ namespace MeuContexto.Migrations
                     b.ToTable("Person");
                 });
 
-            modelBuilder.Entity("Entities.SubPerson", b =>
+            modelBuilder.Entity("Domain.SubPerson", b =>
                 {
                     b.Property<long>("SubPersonId")
                         .ValueGeneratedOnAdd()
@@ -147,7 +147,7 @@ namespace MeuContexto.Migrations
                     b.ToTable("SubPerson");
                 });
 
-            modelBuilder.Entity("Entities.TrackingCode", b =>
+            modelBuilder.Entity("Domain.TrackingCode", b =>
                 {
                     b.Property<int>("TrackingCodeId")
                         .ValueGeneratedOnAdd()
@@ -182,7 +182,7 @@ namespace MeuContexto.Migrations
                     b.ToTable("TrackingCode");
                 });
 
-            modelBuilder.Entity("Entities.TrackingCodeEvents", b =>
+            modelBuilder.Entity("Domain.TrackingCodeEvents", b =>
                 {
                     b.Property<int>("TrackingCodeEventsId")
                         .ValueGeneratedOnAdd()

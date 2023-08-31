@@ -6,7 +6,7 @@ using System;
 using Service.Transactions;
 using Service;
 using Service.Models;
-using Entities;
+using Domain;
 using Service.Utils;
 
 namespace FrontEnd.Controllers

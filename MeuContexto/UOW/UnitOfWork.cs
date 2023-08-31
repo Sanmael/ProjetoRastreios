@@ -1,12 +1,11 @@
-﻿using Entities.Interfaces;
+﻿using Domain.Interfaces;
 using MeuContexto;
 using MeuContexto.Context;
-using MeuContexto.Repositorie;
-using MeuContexto.Repositorys;
+using MeuContexto.DataEntityRepositories;
+using MeuContexto.EntityRepositories;
 using MeuContexto.UOW;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using System;
 
 namespace MeuContexto.UOW
 {
@@ -82,20 +81,22 @@ namespace MeuContexto.UOW
         }
 
 
-        public UnitOfWork(AppDbContext appDbContext, SignInManager<UserIdentity> signInManager, UserManager<UserIdentity> userManager)
+        public UnitOfWork(EntityContext appDbContext, SignInManager<UserIdentity> signInManager, UserManager<UserIdentity> userManager)
         {
             _repository = new EntityRepository(appDbContext);
             _signInManager = signInManager;
             _userManager = userManager;
         }
         //refatorar gambiarra depois
-        public UnitOfWork()
-        {
-            _repository = new DapperRepository(new DbSession("Data Source=DESKTOP-AUTOI40\\SQLEXPRESS;Initial Catalog=NomeDoBancoDeDados;Integrated Security=True;Encrypt=False"));
-        }
-        public UnitOfWork(AppDbContext appDbContext)
+        public UnitOfWork(EntityContext appDbContext)
         {
             _repository = new EntityRepository(appDbContext);
+        }
+        public UnitOfWork()
+        {
+            string connection = "Data Source=DESKTOP-AUTOI40\\SQLEXPRESS;Initial Catalog=NomeDoBancoDeDados;Integrated Security=True;Encrypt=False";
+
+            _repository = new DapperRepository(new DapperContext(connection));
         }
     }   
 }

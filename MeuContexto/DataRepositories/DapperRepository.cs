@@ -1,26 +1,29 @@
 ﻿using Dapper;
 using DapperExtensions;
-using Entities.Interfaces;
+using Domain.Interfaces;
 using MeuContexto.Context;
 using Microsoft.Data.SqlClient;
-using System.ComponentModel.DataAnnotations;
 using System.Data;
 
-namespace MeuContexto.Repositorie
+namespace MeuContexto.DataEntityRepositories
 {
     public class DapperRepository : IRepository
     {
         public static string connectionString = "Data Source=DESKTOP-AUTOI40\\SQLEXPRESS;Initial Catalog=NomeDoBancoDeDados;Integrated Security=True;Encrypt=False";
 
-        private readonly DbSession _dbSession;
+        private readonly DapperContext _dbSession;
 
-        public DapperRepository(DbSession dbSession)
+        public DapperRepository(DapperContext dbSession)
         {
             _dbSession = dbSession;
         }
-        public static IDbConnection GetConnection()
+        public IDbConnection GetConnection()
         {
-            return new SqlConnection(connectionString);
+            if (_dbSession.DbConnection.State == ConnectionState.Closed)
+            {
+                return new SqlConnection(connectionString);
+            }
+            return _dbSession.DbConnection;
         }
 
         public async Task<T> GetEntityAsync<T>(Func<T, bool> predicate) where T : class

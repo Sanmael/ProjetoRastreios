@@ -1,4 +1,4 @@
-﻿using Entities;
+﻿using Domain;
 using MeuContexto.Context;
 using MeuContexto.UOW;
 using FrontEnd.Models;

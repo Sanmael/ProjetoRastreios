@@ -2,7 +2,7 @@
 using System.Web;
 using SendNotification.DTO;
 using System.Globalization;
-using Entities;
+using Domain;
 using MeuContexto.UOW;
 using Newtonsoft.Json;
 using Azure;
@@ -10,7 +10,6 @@ using System.Diagnostics.SymbolStore;
 using System.Threading.Tasks;
 using MeuContexto.Context;
 using Microsoft.EntityFrameworkCore;
-using MeuContexto.Repositorie;
 using System.Linq;
 
 namespace SendNotification.Service
@@ -29,7 +28,7 @@ namespace SendNotification.Service
 
         public async Task GetCodesAsync()
         {
-            List<TrackingCode> codes = await _unitOfWork.TrackingService.GetTrackingCodeActiveAsync();
+            List<TrackingCode> codes = _unitOfWork.TrackingService.GetTrackingCodeActiveAsync().Result.OrderBy(x=> x.TrackingCodeId).ToList();
 
             IEnumerable<IGrouping<int, TrackingCode>> trackingCodes = codes.GroupBy(x => x.SubPersonId);
 
@@ -39,8 +38,9 @@ namespace SendNotification.Service
 
                 List<TrackingCode> trackingCodesSubPerson = trackingCode.Where(x => x.SubPersonId == subPerson.SubPersonId).ToList();
 
-                await ProcessTrackingCodeAsync(trackingCodesSubPerson, subPerson);
-            }                                                                         
+                await Task.Run(() => ProcessTrackingCodeAsync(trackingCodesSubPerson, subPerson));
+
+            }
         }
         public async Task ProcessTrackingCodeAsync(List<TrackingCode> trackingCode, SubPerson subPerson)
         {

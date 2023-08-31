@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity;
 
-namespace MeuContexto.Repositorys
+namespace MeuContexto.EntityRepositories
 {
     public class SeedUserRoleInitial
     {

@@ -1,9 +1,9 @@
-﻿using Entities;
-using Entities.Interfaces;
+﻿using Domain;
+using Domain.Interfaces;
 using System;
 using System.Linq.Expressions;
 
-namespace MeuContexto.Repositorys
+namespace MeuContexto.EntityRepositories
 {
     public class PersonRepository : IPersonRepository
     {

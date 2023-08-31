@@ -1,6 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 
-namespace Entities
+namespace Domain
 {
     public class Person
     {

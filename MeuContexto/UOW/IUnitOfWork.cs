@@ -1,5 +1,5 @@
 ﻿
-using Entities.Interfaces;
+using Domain.Interfaces;
 
 namespace MeuContexto.UOW
 {

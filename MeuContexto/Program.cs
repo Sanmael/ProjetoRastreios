@@ -1,6 +1,6 @@
 using MeuContexto;
 using MeuContexto.Context;
-using MeuContexto.Repositorys;
+using MeuContexto.EntityRepositories;
 using MeuContexto.UOW;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -11,15 +11,17 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 builder.Services.AddRazorPages();
 
-string connectionString = "Data Source=DESKTOP-AUTOI40\\SQLEXPRESS;Initial Catalog=NomeDoBancoDeDados;Integrated Security=True;Encrypt=False";
 
 
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 //builder.Services.AddScoped<PersonTransaction>();
-builder.Services.AddIdentity<UserIdentity, IdentityRole>().AddEntityFrameworkStores<AppDbContext>().AddDefaultTokenProviders();
+builder.Services.AddIdentity<UserIdentity, IdentityRole>().AddEntityFrameworkStores<EntityContext>().AddDefaultTokenProviders();
 builder.Services.AddScoped<SeedUserRoleInitial>();
 builder.Services.ConfigureApplicationCookie(options => options.AccessDeniedPath = "");
-builder.Services.AddDbContext<AppDbContext>(options => options.UseSqlServer(connectionString)); 
+
+var strings = builder.Configuration.GetConnectionString("DefaultConnections");
+
+builder.Services.AddDbContext<EntityContext>(options => options.UseSqlServer(strings)); 
 
 var app = builder.Build();
 

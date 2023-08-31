@@ -1,7 +1,7 @@
-﻿using Entities;
-using Entities.Interfaces;
+﻿using Domain;
+using Domain.Interfaces;
 
-namespace MeuContexto.Repositorys
+namespace MeuContexto.EntityRepositories
 {
     public class TrackingCodeEventsRepository : ITrackingCodeEventsRepository
     {
@@ -27,7 +27,7 @@ namespace MeuContexto.Repositorys
 
         public async Task<TrackingCodeEvents> GetLastTrackingCodeByTrackingCodeId(long trackingCodeid)
         {
-            var teste = await _repository.GetEntityByProcedure<TrackingCodeEvents>(proc: $"select top 1 * from TrackingCodeEvents where TrakingCodeId = {trackingCodeid}", parameters: null);
+            var teste = await _repository.GetEntityByProcedure<TrackingCodeEvents>(proc: $"select top 1 * from TrackingCodeEvents where TrakingCodeId = {trackingCodeid} order by CreationDate desc" , parameters: null);
 
             return teste.FirstOrDefault();
         }

@@ -10,25 +10,16 @@ namespace DependenceInjection
 {
     public static class Dependences
     {
-        public static IServiceCollection AddInfrastructure(IServiceCollection services)
+        public static IServiceCollection AddInfrastructure(IServiceCollection services, IConfiguration configuration)
         {
-
-            string connectionString = "Data Source=DESKTOP-AUTOI40\\SQLEXPRESS;Initial Catalog=NomeDoBancoDeDados;Integrated Security=True;Encrypt=False";
-
-            services.AddScoped<IUnitOfWork, UnitOfWork>();
-            services.AddIdentity<UserIdentity, IdentityRole>().AddEntityFrameworkStores<AppDbContext>().AddDefaultTokenProviders();
+            string connectionString = configuration.GetConnectionString("DefaultConnections");
+            services.AddDbContext<EntityContext>(options => options.UseSqlServer(connectionString));
+            services.AddIdentity<UserIdentity, IdentityRole>().AddEntityFrameworkStores<EntityContext>().AddDefaultTokenProviders();
             services.ConfigureApplicationCookie(options => options.AccessDeniedPath = "");
             services.AddScoped<IUserTransaction, UserTransaction>();
             services.AddScoped<PersonTransaction>();
             services.AddScoped<TrackingTransaction>();
-            services.AddDbContext<AppDbContext>(options => options.UseSqlServer(connectionString));
-
-            return services;
-        }
-        public static IServiceCollection AddInfrastructureMicroServices(IServiceCollection services,string connectionString)
-        {
             services.AddScoped<IUnitOfWork, UnitOfWork>();
-            services.AddDbContext<AppDbContext>(options => options.UseSqlServer(connectionString));
 
             return services;
         }
